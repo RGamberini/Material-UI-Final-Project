@@ -15,13 +15,15 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.transform.Transform;
 
+import java.util.ArrayList;
+
 /**
  * Created by Nick on 12/4/2015.
  */
 public class RudeCell extends HBox{
     Label name;
     MaterialIconView edit, delete;
-    MaterialIconView[] icons;
+    ArrayList<MaterialIconView> icons;
 
     public RudeCell(String item) {
         super();
@@ -30,6 +32,7 @@ public class RudeCell extends HBox{
         this.setMinSize(Double.MIN_VALUE, Double.MIN_VALUE);
         this.getStyleClass().add("rudecell");
 
+//        name = new Label(item.getFirstName() + " " + item.getLastName());
         name = new Label(item);
         this.getChildren().add(name);
         name.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
@@ -53,16 +56,9 @@ public class RudeCell extends HBox{
         delete.setStyleClass("delete");
         delete.setStyleClass("invisible");
 
-        icons = new MaterialIconView[]{edit, delete};
-
-        //DEBUG
-        this.setPickOnBounds(false);
-        this.setMouseTransparent(true);
-        edit.setPickOnBounds(false);
-        edit.setMouseTransparent(true);
-        delete.setPickOnBounds(false);
-        delete.setMouseTransparent(true);
-        //END DEBUG
+        icons = new ArrayList();
+        icons.add(edit);
+        icons.add(delete);
     }
 
     public double vectorDistance(double x1, double y1, double x2, double y2) {
@@ -71,7 +67,7 @@ public class RudeCell extends HBox{
         return Math.sqrt(xd*xd + yd*yd);
     }
 
-    private void switchStyleClass(Node node, String style1, String style2) {
+    protected void switchStyleClass(Node node, String style1, String style2) {
         ObservableList<String> nodeStyle = node.getStyleClass();
         if (nodeStyle.contains(style1)) {
             nodeStyle.set(nodeStyle.indexOf(style1), style2);

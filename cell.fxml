@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.shape.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.effect.*?>
@@ -23,5 +24,9 @@
             <Insets right="5.0" />
          </HBox.margin></MaterialIconView>
       <MaterialIconView glyphName="DELETE" size="20" styleClass="delete" />
+      <Label alignment="CENTER_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="-Infinity" text="Label" HBox.hgrow="ALWAYS">
+         <padding>
+            <Insets left="30.0" />
+         </padding></Label>
    </children>
 </HBox>

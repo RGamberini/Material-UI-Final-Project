@@ -7,6 +7,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
 public class Main extends Application {
@@ -16,7 +17,7 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("sample.fxml"));
         Parent root = (Parent) loader.load();
 
-        Scene scene = new Scene(root, 430, 289);
+        Scene scene = new Scene(root, 953, 500);
         scene.getStylesheets().add(getClass().getResource("material-fx-v0_3.css").toExternalForm());
         scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
 

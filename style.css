@@ -50,7 +50,3 @@
 .visible {
 	-fx-opacity: 1;
 }
-
-.rudecell:hover .delete {
-	-fx-opacity: 0;
-}
