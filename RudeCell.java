@@ -22,7 +22,7 @@ import java.util.ArrayList;
  */
 public abstract class RudeCell extends HBox{
 
-    public RudeCell(String item) {
+    public RudeCell() {
         super();
         this.setAlignment(Pos.CENTER_LEFT);
         this.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);

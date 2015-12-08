@@ -22,7 +22,7 @@ public class ListCell extends RudeCell {
     ArrayList<MaterialIconView> icons;
 
     public ListCell(String item) {
-        super(item);
+        super();
         //        name = new Label(item.getFirstName() + " " + item.getLastName());
         name = new Label(item);
         this.getChildren().add(name);
