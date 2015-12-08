@@ -12,7 +12,7 @@ import javafx.scene.shape.Line;
 /**
  * Created by Nick on 12/6/2015.
  */
-public class Student extends RudeCell {
+public class Student extends ListCell {
     public String firstName, lastName;
     public String gpa;
     @FXML public Label property;
