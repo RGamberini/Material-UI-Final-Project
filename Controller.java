@@ -16,8 +16,9 @@ import java.io.IOException;
 import java.util.Random;
 
 public class Controller {
-    @FXML public JFXListView<Student> myListView = new JFXListView();
-    private ObservableList<Student> listViewData = FXCollections.observableArrayList();
+    @FXML public JFXListView<RudeCell> myListView = new JFXListView();
+    @FXML public VBox inputVBOX = new VBox();
+    private ObservableList<RudeCell> listViewData = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() throws IOException {
@@ -34,7 +35,12 @@ public class Controller {
         });
         myListView.getStyleClass().add("mylistview");
 
-        listViewData.add(new Student("Name", "", "GPA"));
+        TitleCell l = new TitleCell("Name");
+        l.setOnMouseEntered((e) -> {System.out.println("FAW"); l.mainText.fire();});
+        inputVBOX.getChildren().add(l);
+
+        listViewData.add(new TitleCell("Name"));
+        listViewData.add(new TitleCell("Name"));
         listViewData.add(new Student("Hans", "Muster", (double) ((int) (rng.nextDouble() * 10) / 10)));
         listViewData.add(new Student("Ruth", "Mueller", (double) ((int) (rng.nextDouble() * 10) / 10)));
         listViewData.add(new Student("Heinz", "Kurz", (double) ((int) (rng.nextDouble() * 10) / 10)));

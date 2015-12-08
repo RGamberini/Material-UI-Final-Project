@@ -30,6 +30,5 @@ public class Student extends ListCell {
         this.property = new Label(gpa);
         this.property.setPadding(new Insets(0, 0, 0, 30));
         this.getChildren().add(property);
-        System.out.println(this.getStyleClass());
     }
 }

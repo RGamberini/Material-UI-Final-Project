@@ -50,3 +50,11 @@
 .visible {
 	-fx-opacity: 1;
 }
+
+.button-title{
+    -fx-padding: 0.7em 0.57em;
+    -fx-font-size: 18px;
+    -fx-background-color: WHITE;
+    -fx-pref-width: 200;
+    -fx-text-fill: #757575;
+}
