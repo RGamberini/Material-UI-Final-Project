@@ -36,11 +36,16 @@ public class Controller {
         myListView.getStyleClass().add("mylistview");
 
         TitleCell l = new TitleCell("Name");
-        l.setOnMouseEntered((e) -> {System.out.println("FAW"); l.mainText.fire();});
-        inputVBOX.getChildren().add(l);
+        l.sort_ascendingProperty().addListener((o, oldVal, newVal) -> {
+            System.out.println("Shots fired");
+            if (newVal) {
+                listViewData.sort(new RudeCellComparator());
+            } else {
+                listViewData.sort(new RudeCellComparator().reversed());
+            }
+        });
+        listViewData.add(l);
 
-        listViewData.add(new TitleCell("Name"));
-        listViewData.add(new TitleCell("Name"));
         listViewData.add(new Student("Hans", "Muster", (double) ((int) (rng.nextDouble() * 10) / 10)));
         listViewData.add(new Student("Ruth", "Mueller", (double) ((int) (rng.nextDouble() * 10) / 10)));
         listViewData.add(new Student("Heinz", "Kurz", (double) ((int) (rng.nextDouble() * 10) / 10)));
@@ -52,6 +57,7 @@ public class Controller {
         listViewData.add(new Student("Martin", "Mueller", (double) ((int) (rng.nextDouble() * 10) / 10)));
 
         myListView.setItems(listViewData);
+        listViewData.sort(new RudeCellComparator());
         //myListView.getItems().add(rudeCell);
     }
 }

@@ -58,3 +58,11 @@
     -fx-pref-width: 200;
     -fx-text-fill: #757575;
 }
+
+.profile-card-heading {
+    -fx-border-style: hidden hidden solid hidden;
+}
+
+.button-icon {
+    -fx-fill: #757575;
+}

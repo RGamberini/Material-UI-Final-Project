@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.image.*?>
 <?import de.jensd.fx.glyphs.materialicons.*?>
 <?import javafx.scene.*?>
 <?import javafx.scene.text.*?>
@@ -70,38 +74,66 @@
             </VBox>
             <VBox prefHeight="360.0" prefWidth="360.0" styleClass="card">
                <children>
-                  <HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="20.0">
-                     <children>
-                        <Label maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="23.0" styleClass="roboto" text="Name" textFill="#757575" textOverrun="CLIP" HBox.hgrow="ALWAYS">
-                           <font>
-                              <Font name="System Bold" size="19.0" />
-                           </font>
-                           <HBox.margin>
-                              <Insets />
-                           </HBox.margin>
-                        </Label>
-                        <Label layoutX="10.0" layoutY="-1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="23.0" text="GPA" textFill="#757575" textOverrun="CLIP">
-                           <font>
-                              <Font name="System Bold" size="19.0" />
-                           </font>
-                        </Label>
-                     </children>
-                     <padding>
-                        <Insets bottom="15.0" />
-                     </padding>
-                  </HBox>
                   <JFXListView fx:id="myListView" maxHeight="1.7976931348623157E308" minHeight="40.0" minWidth="40.0" prefHeight="360.0" prefWidth="360.0" />
                </children>
                <HBox.margin>
                   <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
                </HBox.margin>
             </VBox>
-            <VBox fx:id="inputVBOX1" layoutX="20.0" layoutY="20.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="360.0" prefWidth="360.0" styleClass="card">
+            <VBox prefHeight="360.0" prefWidth="360.0" styleClass="card">
                <HBox.margin>
                   <Insets bottom="10.0" left="5.0" right="10.0" top="10.0" />
                </HBox.margin>
                <children>
-                  <ListView fx:id="newListView" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" />
+                  <HBox>
+                     <children>
+                        <VBox prefHeight="124.0" prefWidth="178.0" spacing="10.0" HBox.hgrow="ALWAYS">
+                           <children>
+                              <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" styleClass="profile-card-heading" text="Hans Muster">
+                                 <font>
+                                    <Font name="System Bold" size="20.0" />
+                                 </font>
+                                 <VBox.margin>
+                                    <Insets />
+                                 </VBox.margin>
+                              </Label>
+                              <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" styleClass="profile-card-heading" text="(631)896-5088">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                                 <graphic>
+                                    <FontAwesomeIconView fill="#757575" glyphName="PHONE_SQUARE" size="22" />
+                                 </graphic>
+                              </Label>
+                              <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" prefWidth="178.0" styleClass="profile-card-heading" text="6 Oelsner Drive, Northport, NY" wrapText="true">
+                                 <font>
+                                    <Font name="System Bold" size="16.0" />
+                                 </font>
+                                 <graphic>
+                                    <MaterialIconView fill="#757575" glyphName="PLACE" size="25" />
+                                 </graphic>
+                              </Label>
+                           </children>
+                           <HBox.margin>
+                              <Insets top="15.0" />
+                           </HBox.margin>
+                        </VBox>
+                        <StackPane prefHeight="150.0">
+                           <children>
+                              <Circle fill="#1f93ff00" radius="70.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0">
+                                 <effect>
+                                    <DropShadow />
+                                 </effect>
+                              </Circle>
+                              <ImageView fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
+                                 <image>
+                                    <Image url="@../resources/avatars/astronaut.png" />
+                                 </image>
+                              </ImageView>
+                           </children>
+                        </StackPane>
+                     </children>
+                  </HBox>
                </children>
             </VBox>
          </children>

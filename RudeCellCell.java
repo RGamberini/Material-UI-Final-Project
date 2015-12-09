@@ -11,13 +11,20 @@ public class RudeCellCell extends JFXListCell<RudeCell>{
     }
 
     public void updateItem(RudeCell item, boolean empty) {
-        super.updateItem(item, empty);
-        this.setPickOnBounds(false);
-        this.setOnMouseEntered((e) -> item.handleMouseEntered(e));
-        this.setOnMouseExited((e) -> item.handleMouseEntered(e));
-        //this.setOnMouseEntered((e) -> this.setOnMouseMoved((f) -> item.handleHoverAction(f)));
-        //this.setOnMouseMoved((f) -> item.handleHoverAction(f));
-        //this.setOnMouseExited((e) -> this.setOnMouseMoved(null));
-        //this.setMouseTransparent(true);
+        if (item != null) {
+            if (item.isExempt()) {
+                setGraphic(item);
+            } else {
+                super.updateItem(item, empty);
+                this.setPickOnBounds(false);
+                this.setOnMouseEntered((e) -> item.handleMouseEntered(e));
+                this.setOnMouseExited((e) -> item.handleMouseEntered(e));
+                this.setOnMouseClicked((e) -> item.handleMouseClick(e));
+                //this.setOnMouseEntered((e) -> this.setOnMouseMoved((f) -> item.handleHoverAction(f)));
+                //this.setOnMouseMoved((f) -> item.handleHoverAction(f));
+                //this.setOnMouseExited((e) -> this.setOnMouseMoved(null));
+                //this.setMouseTransparent(true);
+            }
+        }
     }
 }
