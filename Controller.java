@@ -6,6 +6,9 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.JavaFXBuilderFactory;
+import javafx.geometry.Insets;
+import javafx.scene.Parent;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
@@ -13,11 +16,12 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Random;
 
 public class Controller {
     @FXML public JFXListView<RudeCell> myListView = new JFXListView();
-    @FXML public VBox inputVBOX = new VBox();
+    @FXML public HBox mainContainer = new HBox();
     private ObservableList<RudeCell> listViewData = FXCollections.observableArrayList();
 
     @FXML
@@ -28,36 +32,78 @@ public class Controller {
             return cell;
         });
 
-        myListView.setOnMouseMoved((e) -> {
-            for (RudeCell rudeCell: myListView.getItems()) {
-                rudeCell.handleHoverAction(e);
+        myListView.getSelectionModel().selectedItemProperty().addListener((o, oldVal, newVal) -> {
+            //There is a chance it still has a deleted element selected
+            if (listViewData.contains(newVal)) {
+                newVal.toDeleteProperty().addListener((_o, _oldVal, _newVal) -> {
+                    if (_newVal) {
+                        listViewData.remove(newVal);
+                    }
+                });
             }
         });
         myListView.getStyleClass().add("mylistview");
 
         TitleCell l = new TitleCell("Name");
-        l.sort_ascendingProperty().addListener((o, oldVal, newVal) -> {
-            System.out.println("Shots fired");
-            if (newVal) {
-                listViewData.sort(new RudeCellComparator());
-            } else {
-                listViewData.sort(new RudeCellComparator().reversed());
+        l.activeButtonProperty().addListener((o, oldVal, newVal) -> {
+            sort(newVal, newVal.getSortAscending());
+            newVal.sortAscendingProperty().addListener((_o, _oldVal, _newVal) -> {
+                sort(newVal, _newVal);
+            });
+
+            newVal.sortPropertyProperty().addListener((_o, _oldVal, _newVal) -> {
+                sort(newVal, newVal.getSortAscending());
+            });
+        });
+
+        l.subMenuButton.sortPropertyProperty().addListener((o, oldVal, newVal) -> {
+            for (RudeCell cell: listViewData) {
+                if (cell instanceof Person) {
+                    Person person = (Person) cell;
+                    person.setSubLabelProperty(newVal);
+                }
             }
         });
         listViewData.add(l);
-
-        listViewData.add(new Student("Hans", "Muster", (double) ((int) (rng.nextDouble() * 10) / 10)));
-        listViewData.add(new Student("Ruth", "Mueller", (double) ((int) (rng.nextDouble() * 10) / 10)));
-        listViewData.add(new Student("Heinz", "Kurz", (double) ((int) (rng.nextDouble() * 10) / 10)));
-        listViewData.add(new Student("Cornelia", "Meier", (double) ((int) (rng.nextDouble() * 10) / 10)));
-        listViewData.add(new Student("Werner", "Meyer", (double) ((int) (rng.nextDouble() * 10) / 10)));
-        listViewData.add(new Student("Lydia", "Kunz", (double) ((int) (rng.nextDouble() * 10) / 10)));
-        listViewData.add(new Student("Anna", "Best", (double) ((int) (rng.nextDouble() * 10) / 10)));
-        listViewData.add(new Student("Stefan", "Meier", (double) ((int) (rng.nextDouble() * 10) / 10)));
-        listViewData.add(new Student("Martin", "Mueller", (double) ((int) (rng.nextDouble() * 10) / 10)));
+        for (int i = 0; i < 9; i++) {
+            listViewData.add(RandomPersonFactory.randomPerson());
+        }
 
         myListView.setItems(listViewData);
-        listViewData.sort(new RudeCellComparator());
-        //myListView.getItems().add(rudeCell);
+        listViewData.sort(new RudeCellComparator(l.mainText.getSortProperty()));
+        //The overview card is setup now to setup the Profile Card
+
+        URL location = getClass().getResource("profileCard.fxml");
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(location);
+        fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
+
+        Parent root = (Parent) fxmlLoader.load(location.openStream());
+        mainContainer.setMargin(root, new Insets(10, 5, 5, 10));
+        mainContainer.getChildren().add(root);
+
+        ProfileCardController profileCard = fxmlLoader.getController();
+        //profileCard.setMainPerson((Person) listViewData.get(1));
+
+        myListView.getSelectionModel().selectedItemProperty().addListener((o, oldVal, newVal) -> {
+           if (newVal instanceof Person && listViewData.contains(newVal)) {
+               profileCard.setMainPerson((Person) newVal);
+            }
+        });
+
+        //Fire these events so it all looks right to the user
+        l.subMenu.getSelectionModel().select(0);
+        l.mainText.setActive(true);
+        myListView.getSelectionModel().select(1);
+
+    }
+
+    private void sort(RudeSortButton rudeSortButton, boolean forwards) {
+        if (forwards) {
+            listViewData.sort(new RudeCellComparator(rudeSortButton.getSortProperty()));
+        } else {
+            listViewData.sort(new RudeCellComparator(rudeSortButton.getSortProperty()).reversed());
+        }
     }
 }

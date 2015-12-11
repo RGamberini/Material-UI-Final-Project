@@ -9,9 +9,11 @@ import javafx.scene.input.MouseEvent;
 public class RudeIcon extends MaterialIconView{
     public RudeIcon() {
         super();
+        setStyleClass("inactive");
+        setStyleClass("invisible");
     }
 
-    public void handleMouseClick(MouseEvent event, ListCell parent) {
+    public void handleMouseClick(MouseEvent event, IconCell parent) {
         return;
     }
 }

@@ -55,12 +55,21 @@
     -fx-padding: 0.7em 0.57em;
     -fx-font-size: 18px;
     -fx-background-color: WHITE;
-    -fx-pref-width: 200;
     -fx-text-fill: #757575;
 }
 
+.profile-card-name {
+    -fx-font-size: 20px;
+    -fx-border-style: hidden hidden solid hidden;
+    -fx-font-weight: bold;
+}
 .profile-card-heading {
     -fx-border-style: hidden hidden solid hidden;
+    -fx-font-size: 17px;
+}
+
+.profile-card-icon {
+    -fx-fill: #757575;
 }
 
 .button-icon {

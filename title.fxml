@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.materialdesignicons.*?>
+<?import com.jfoenix.controls.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.text.*?>
+<?import de.jensd.fx.glyphs.materialicons.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<HBox alignment="CENTER_LEFT" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="299.0" styleClass="card" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <JFXButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" styleClass="button-title" text="Name" textFill="#757575" HBox.hgrow="ALWAYS">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </JFXButton>
+      <JFXButton>
+         <graphic>
+            <MaterialDesignIconView glyphName="ARROW_UP" size="30" />
+         </graphic>
+      </JFXButton>
+      <JFXComboBox style="-fx-border-width: 0;" />
+   </children>
+</HBox>

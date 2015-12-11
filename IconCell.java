@@ -3,6 +3,8 @@ package sample;
 import com.jfoenix.controls.JFXTextField;
 import de.jensd.fx.glyphs.materialicons.MaterialIconView;
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.geometry.Insets;
@@ -17,68 +19,21 @@ import javafx.scene.layout.Priority;
 import java.util.ArrayList;
 
 /**
- * This is a basic cell with an edit and delete button
+ * This is a cell that contains icons
  */
-public class ListCell extends RudeCell {
+public class IconCell extends RudeCell {
 
-    Label name;
-    RudeIcon edit, delete;
+    Label mainLabel;
     ArrayList<RudeIcon> icons;
 
-    public ListCell(String item) {
+    public IconCell() {
         super();
-
-        name = new Label(item);
-        this.getChildren().add(name);
-        name.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
-        name.setMinSize(Double.MIN_VALUE, Double.MIN_VALUE);
-        this.setHgrow(name, Priority.ALWAYS);
-
-        edit = new RudeIcon() {
-            public void handleMouseClick(MouseEvent event, ListCell parent) {
-                parent.getChildren().remove(name);
-
-                JFXTextField newName = new JFXTextField(name.getText());
-                parent.getChildren().add(0, newName);
-                parent.setHgrow(newName, Priority.ALWAYS);
-                newName.requestFocus();
-
-                newName.setOnKeyPressed((e) -> {
-                    if (e.getCode().equals(KeyCode.ENTER)) {
-                        parent.getChildren().remove(newName);
-                        name.setText(newName.getText());
-                        parent.getChildren().add(0, name);
-                    }
-                });
-
-            }
-        };
-
-        this.getChildren().add(edit);
-        edit.setGlyphName("EDIT");
-        edit.setGlyphSize(20);
-        edit.setStyleClass("inactive");
-        edit.setStyleClass("edit");
-        edit.setStyleClass("invisible");
-        this.setMargin(edit, new Insets(0, 1, 0, 0));
-
-        delete = new RudeIcon() {
-            @Override
-            public void handleMouseClick(MouseEvent event, ListCell parent) {
-
-            }
-        };
-
-        this.getChildren().add(delete);
-        delete.setGlyphName("DELETE");
-        delete.setGlyphSize(20);
-        delete.setStyleClass("inactive");
-        delete.setStyleClass("delete");
-        delete.setStyleClass("invisible");
-
-        icons = new ArrayList();
-        icons.add(edit);
-        icons.add(delete);
+        mainLabel = new Label();
+        this.getChildren().add(mainLabel);
+        mainLabel.setMaxSize(Double.MAX_VALUE, Double.MAX_VALUE);
+        mainLabel.setMinSize(Double.MIN_VALUE, Double.MIN_VALUE);
+        this.setHgrow(mainLabel, Priority.ALWAYS);
+        icons = new ArrayList<>();
     }
 
     public static double vectorDistance(double x1, double y1, double x2, double y2) {
@@ -92,10 +47,10 @@ public class ListCell extends RudeCell {
         if (nodeStyle.contains(style1)) {
             nodeStyle.set(nodeStyle.indexOf(style1), style2);
             return;
-        } else if (nodeStyle.contains(style2)) {
+        }/* else if (nodeStyle.contains(style2)) {
             nodeStyle.set(nodeStyle.indexOf(style2), style1);
             return;
-        }
+        }*/
     }
 
 
@@ -110,13 +65,14 @@ public class ListCell extends RudeCell {
             double distance = vectorDistance(event.getSceneX(), event.getSceneY(), x, y);
             //        System.out.println(distance);
             ObservableList<String> style = icon.getStyleClass();
+
             if (distance > HOVERDISTANCE && style.contains("active")) {
                 try {
                     this.getScene().setCursor(Cursor.DEFAULT);
                 } catch (NullPointerException e) {
                     System.err.println("Scene unavailable");
                 }
-                switchStyleClass(icon, "inactive", "active");
+                switchStyleClass(icon, "active", "inactive");
             } else if (distance < HOVERDISTANCE && (style.contains("inactive") || this.getScene().getCursor() != Cursor.HAND)) {
                 try {
                     this.getScene().setCursor(Cursor.HAND);
@@ -124,13 +80,21 @@ public class ListCell extends RudeCell {
                     System.err.println("Scene unavailable");
                 }
                 switchStyleClass(icon, "inactive", "active");
+                //switchStyleClass(icon, "invisible", "visible");
             }
         }
     }
 
     public void handleMouseEntered(MouseEvent event) {
-        switchStyleClass(edit, "invisible", "visible");
-        switchStyleClass(delete, "invisible", "visible");
+        for (RudeIcon icon : icons) {
+            switchStyleClass(icon, "invisible", "visible");
+        }
+    }
+
+    public void handleMouseExited(MouseEvent event) {
+        for (RudeIcon icon : icons) {
+            switchStyleClass(icon, "visible", "invisible");
+        }
     }
 
     public void handleMouseClick(MouseEvent event) {
@@ -139,5 +103,10 @@ public class ListCell extends RudeCell {
                 icon.handleMouseClick(event, this);
             }
         }
+    }
+
+    @Override
+    public String toString() {
+        return mainLabel.getText();
     }
 }

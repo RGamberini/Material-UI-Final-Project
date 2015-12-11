@@ -1,5 +1,7 @@
 package sample;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.geometry.Pos;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
@@ -9,6 +11,8 @@ import javafx.scene.layout.HBox;
  */
 public abstract class RudeCell extends HBox{
     private boolean exempt;
+    BooleanProperty toDelete;
+
     public RudeCell() {
         super();
         this.setAlignment(Pos.CENTER_LEFT);
@@ -16,11 +20,16 @@ public abstract class RudeCell extends HBox{
         this.setMinSize(Double.MIN_VALUE, Double.MIN_VALUE);
         this.getStyleClass().add("rudecell");
         this.setExempt(false);
+
+        toDelete = new SimpleBooleanProperty();
+        this.setToDelete(false);
     }
 
     public void handleHoverAction(MouseEvent event) {}
 
     public void handleMouseEntered(MouseEvent event) {}
+
+    public void handleMouseExited(MouseEvent event) {}
 
     public void handleMouseClick(MouseEvent event) {}
 
@@ -30,5 +39,17 @@ public abstract class RudeCell extends HBox{
 
     public void setExempt(boolean exempt) {
         this.exempt = exempt;
+    }
+
+    public boolean getToDelete() {
+        return toDelete.get();
+    }
+
+    public BooleanProperty toDeleteProperty() {
+        return toDelete;
+    }
+
+    public void setToDelete(boolean toDelete) {
+        this.toDelete.set(toDelete);
     }
 }

@@ -18,8 +18,9 @@ public class RudeCellCell extends JFXListCell<RudeCell>{
                 super.updateItem(item, empty);
                 this.setPickOnBounds(false);
                 this.setOnMouseEntered((e) -> item.handleMouseEntered(e));
-                this.setOnMouseExited((e) -> item.handleMouseEntered(e));
+                this.setOnMouseExited((e) -> item.handleMouseExited(e));
                 this.setOnMouseClicked((e) -> item.handleMouseClick(e));
+                this.setOnMouseMoved((e) -> item.handleHoverAction(e));
                 //this.setOnMouseEntered((e) -> this.setOnMouseMoved((f) -> item.handleHoverAction(f)));
                 //this.setOnMouseMoved((f) -> item.handleHoverAction(f));
                 //this.setOnMouseExited((e) -> this.setOnMouseMoved(null));
