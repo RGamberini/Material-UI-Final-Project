@@ -1,3 +1,7 @@
+/*.card .text {
+    -fx-fill: rgba(0,0,0,.68);
+}*/
+
 .mylistview .scroll-bar:horizontal .track,
 .mylistview .scroll-bar:vertical .track{
     -fx-background-color:transparent;
@@ -55,23 +59,33 @@
     -fx-padding: 0.7em 0.57em;
     -fx-font-size: 18px;
     -fx-background-color: WHITE;
-    -fx-text-fill: #757575;
+    /*-fx-text-fill: #757575;*/
 }
 
 .profile-card-name {
     -fx-font-size: 20px;
-    -fx-border-style: hidden hidden solid hidden;
+    /*-fx-border-style: hidden hidden solid hidden;*/
+    /*-fx-text-fill: rgb(100,100,100);*/
     -fx-font-weight: bold;
+
 }
 .profile-card-heading {
-    -fx-border-style: hidden hidden solid hidden;
+    /*-fx-border-style: hidden hidden solid hidden;*/
     -fx-font-size: 17px;
 }
 
 .profile-card-icon {
-    -fx-fill: #757575;
+    -fx-fill: rgba(0,0,0,.45);
 }
 
 .button-icon {
-    -fx-fill: #757575;
+    -fx-fill: rgba(0,0,0,.45);
+}
+
+.card {
+	-fx-background-color: rgb(255.0, 255.0, 255.0);
+	-fx-background-radius: 4.0;
+	-fx-effect: dropshadow(gaussian, rgb(0.0, 0.0, 0.0, 0.15), 6.0, 0.7, 0.0,
+		1.5);
+	-fx-padding: 16 16 16 16;
 }

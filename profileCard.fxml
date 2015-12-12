@@ -24,20 +24,32 @@
          <children>
             <VBox fx:id="headerVbox" prefHeight="124.0" prefWidth="178.0" spacing="10.0" HBox.hgrow="ALWAYS">
                <HBox.margin>
-                  <Insets top="5.0" />
+                  <Insets left="16.0" />
                </HBox.margin>
             </VBox>
             <StackPane prefHeight="150.0">
                <children>
-                  <Circle fill="#1f93ff00" radius="75.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="2.0">
+                  <ImageView fx:id="profileImage" fitHeight="160.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true">
+                     <StackPane.margin>
+                        <Insets />
+                     </StackPane.margin>
+                     <image>
+                        <Image url="@../resources/avatars/Person/user_male_banned_material.png" />
+                     </image></ImageView>
+                  <Circle fill="#1f93ff00" radius="75.0" stroke="#00000082" strokeType="INSIDE" strokeWidth="2.0">
                      <effect>
                         <DropShadow />
                      </effect>
                   </Circle>
-                  <ImageView fx:id="profileImage" fitHeight="160.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true" />
                </children>
+               <HBox.margin>
+                  <Insets top="-12.0" />
+               </HBox.margin>
             </StackPane>
          </children>
+         <VBox.margin>
+            <Insets left="-16.0" right="-16.0" />
+         </VBox.margin>
       </HBox>
       <JFXListView fx:id="profileCardList">
          <VBox.margin>

@@ -98,7 +98,7 @@
 }
 
 .card-title .text {
-	-fx-fill: -fx-text-title-color;
+	/*-fx-fill: -fx-text-title-color;*/
 }
 
 .card-subtitle {
@@ -107,7 +107,7 @@
 }
 
 .card-subtitle .text {
-	-fx-fill: -fx-text-subtitle-color;
+	/*-fx-fill: -fx-text-subtitle-color;*/
 }
 
 .control-label {
@@ -116,7 +116,7 @@
 }
 
 .control-label .text {
-	-fx-fill: -fx-text-control-title-color;
+	/*-fx-fill: -fx-text-control-title-color;*/
 }
 
 .card-button {
