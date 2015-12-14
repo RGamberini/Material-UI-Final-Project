@@ -1,6 +1,11 @@
 package sample;
 
 import com.jfoenix.controls.JFXListCell;
+import javafx.animation.Interpolator;
+import javafx.animation.ParallelTransition;
+import javafx.animation.TranslateTransition;
+import javafx.scene.input.MouseEvent;
+import javafx.util.Duration;
 
 /**
  * Created by Nick on 12/6/2015.
@@ -16,15 +21,11 @@ public class RudeCellCell extends JFXListCell<RudeCell>{
                 setGraphic(item);
             } else {
                 super.updateItem(item, empty);
+                item.setInList(true);
                 this.setPickOnBounds(false);
-                this.setOnMouseEntered((e) -> item.handleMouseEntered(e));
-                this.setOnMouseExited((e) -> item.handleMouseExited(e));
-                this.setOnMouseClicked((e) -> item.handleMouseClick(e));
-                this.setOnMouseMoved((e) -> item.handleHoverAction(e));
-                //this.setOnMouseEntered((e) -> this.setOnMouseMoved((f) -> item.handleHoverAction(f)));
-                //this.setOnMouseMoved((f) -> item.handleHoverAction(f));
-                //this.setOnMouseExited((e) -> this.setOnMouseMoved(null));
-                //this.setMouseTransparent(true);
+                this.setOnMouseEntered(item::fireEvent);
+                this.setOnMouseExited(item::fireEvent);
+                this.setOnMouseMoved(item::fireEvent);
             }
         }
     }

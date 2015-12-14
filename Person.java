@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
+import javafx.scene.Cursor;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
@@ -58,7 +59,7 @@ public class Person extends IconCell{
         //The down and dirty
         this.mainLabel.textProperty().bind(Bindings.concat(firstNameProperty(), " ", lastNameProperty()));
 
-        RudeIcon edit = new RudeEditIcon(mainLabel) {
+        RudeIcon edit = new RudeEditIcon(this, mainLabel) {
             @Override
             public void assignText(String text) {
                 int i = text.indexOf(" ");
@@ -66,22 +67,20 @@ public class Person extends IconCell{
                 setLastName(text.substring(i + 1));
             }
         };
-        this.getChildren().add(edit);
         this.icons.add(edit);
         this.setMargin(edit, new Insets(0, 1, 0, 0));
 
-        RudeIcon delete = new RudeDeleteIcon();
-        this.getChildren().add(delete);
+        RudeIcon delete = new RudeDeleteIcon(this);
         this.icons.add(delete);
 
         subLabel = new IconCell();
-        RudeIcon subEdit = new RudeEditIcon(subLabel.mainLabel) {
+        subLabel.setInList(true);
+        RudeIcon subEdit = new RudeEditIcon(subLabel, subLabel.mainLabel) {
             @Override
             public void assignText(String text) {
                 propertyMap.get(getSubLabelProperty()).set(text);
             }
         };
-        subLabel.getChildren().add(subEdit);
         subLabel.icons.add(subEdit);
         this.getChildren().add(subLabel);
         subLabel.setMargin(subLabel.mainLabel, new Insets(0, 5, 0, 15));
@@ -108,7 +107,7 @@ public class Person extends IconCell{
     @Override
     public void handleMouseClick(MouseEvent event) {
         super.handleMouseClick(event);
-        this.subLabel.handleMouseClick(event);
+        subLabel.handleMouseClick(event);
     }
 
     @Override

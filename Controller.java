@@ -5,10 +5,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListCell;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.effects.JFXDepthManager;
-import javafx.animation.Interpolator;
-import javafx.animation.ParallelTransition;
-import javafx.animation.ScaleTransition;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -41,18 +38,53 @@ public class Controller {
 
     @FXML
     public void initialize() throws IOException {
-        Random rng = new Random();
         myListView.setCellFactory((list) -> {
             JFXListCell cell = new RudeCellCell();
             return cell;
         });
 
-        myListView.getSelectionModel().selectedItemProperty().addListener((o, oldVal, newVal) -> {
+        myListView.getSelectionModel().selectedItemProperty().addListener((o, oldVal, cellToDelete) -> {
             //There is a chance it still has a deleted element selected
-            if (listViewData.contains(newVal)) {
-                newVal.toDeleteProperty().addListener((_o, _oldVal, _newVal) -> {
-                    if (_newVal) {
-                        listViewData.remove(newVal);
+            if (listViewData.contains(cellToDelete)) {
+                cellToDelete.toDeleteProperty().addListener((_o, _oldVal, newVal) -> {
+                    if (newVal) {
+                        int index = listViewData.indexOf(cellToDelete);
+                        myListView.getSelectionModel().select(oldVal);
+                        TranslateTransition deleteAnimation = new TranslateTransition(Duration.millis(700), cellToDelete);
+                        deleteAnimation.setByX(cellToDelete.getWidth() * 1.2);
+                        deleteAnimation.setCycleCount(1);
+                        deleteAnimation.setInterpolator(Animations.materialInterp);
+                        deleteAnimation.play();
+
+                        PauseTransition pauseTransition = new PauseTransition(Duration.millis(200));
+                        pauseTransition.setOnFinished((e) -> {
+                            ParallelTransition parallelTransition = new ParallelTransition();
+                            for (int i = index; i < listViewData.size(); i++) {
+                                TranslateTransition replaceAnimation = new TranslateTransition(Duration.millis(700), listViewData.get(i));
+                                replaceAnimation.setToY(cellToDelete.getHeight() * -1.8); //2.0 overshoots just a hair
+                                replaceAnimation.setCycleCount(1);
+                                replaceAnimation.setInterpolator(Animations.materialInterp);
+                                parallelTransition.getChildren().add(replaceAnimation);
+                            }
+                            parallelTransition.play();
+                            PauseTransition _pauseTransition = new PauseTransition(Duration.millis(700));
+                            _pauseTransition.setOnFinished((_e) -> {
+                                ParallelTransition _parallelTransition = new ParallelTransition();
+                                for (int i = index; i < listViewData.size(); i++) {
+                                    TranslateTransition replaceAnimation = new TranslateTransition(Duration.ONE, listViewData.get(i));
+                                    replaceAnimation.setToY(0);
+                                    replaceAnimation.setCycleCount(1);
+                                    replaceAnimation.setInterpolator(Animations.materialInterp);
+                                    _parallelTransition.getChildren().add(replaceAnimation);
+                                }
+                                _parallelTransition.play();
+                                PauseTransition __pauseTransition = new PauseTransition(Duration.ONE);
+                                __pauseTransition.setOnFinished((__e) -> listViewData.remove(cellToDelete));
+                                __pauseTransition.play();
+                            });
+                            _pauseTransition.play();
+                        });
+                        pauseTransition.play();
                     }
                 });
             }
@@ -82,7 +114,7 @@ public class Controller {
             }
         });
         listViewData.add(l);
-        for (int i = 0; i < 9; i++) {
+        for (int i = 0; i < 16; i++) {
             listViewData.add(RandomPersonFactory.randomPerson());
         }
 
@@ -114,12 +146,15 @@ public class Controller {
         myListView.getSelectionModel().select(1);
 
         actionButton.addEventHandler(MouseEvent.MOUSE_PRESSED, (e) -> {
-            ScaleTransition preButtonScale = new ScaleTransition(Duration.millis(100), actionButton);
-            preButtonScale.setToX(1.2);
-            preButtonScale.setToY(1.2);
-            preButtonScale.setCycleCount(1);
-            preButtonScale.setInterpolator(Interpolator.SPLINE(0, 0, 1, 1));
-            preButtonScale.play();
+            Animations.FloatingActionButtonPressed.setNode(actionButton);
+            Animations.FloatingActionButtonPressed.play();
+        });
+
+        actionButton.addEventHandler(MouseEvent.MOUSE_RELEASED, (e) -> {
+            if (!actionButton.contains(e.getX(), e.getY())) {
+                Animations.FloatingActionButtonReleased.setNode(actionButton);
+                Animations.FloatingActionButtonReleased.play();
+            }
         });
 
         actionButton.setOnMouseClicked((e) -> {
@@ -141,30 +176,13 @@ public class Controller {
             inputProfileCard.setScaleY(0);
             inputProfileCard.setTranslateX(180);
             inputProfileCard.setTranslateY(180);
-            ScaleTransition cardScale = new ScaleTransition(Duration.millis(300), inputProfileCard);
-            TranslateTransition cardTranslate = new TranslateTransition(Duration.millis(300), inputProfileCard);
 
-            cardTranslate.setByX(-180);
-            cardTranslate.setByY(-180);
-            cardTranslate.setCycleCount(1);
-            cardTranslate.setInterpolator(Interpolator.SPLINE(0, 0, 1, 1));
+            Animations.FloatingActionButtonClicked.setNode(actionButton);
+            Animations.FloatingActionButtonClicked.play();
 
-            cardScale.setInterpolator(Interpolator.SPLINE(0, 0, 1, 1));
-            cardScale.setByX(.98);
-            cardScale.setByY(.98);
-            cardScale.setCycleCount(1);
+            Animations.NewCard.setNode(inputProfileCard);
+            Animations.NewCard.play();
 
-
-            ScaleTransition buttonScale = new ScaleTransition(Duration.millis(200), actionButton);
-            buttonScale.setToX(0);
-            buttonScale.setToY(0);
-            buttonScale.setCycleCount(1);
-            buttonScale.setInterpolator(Interpolator.SPLINE(0, 0, 1, 1));
-            buttonScale.play();
-
-            ParallelTransition pt = new ParallelTransition();
-            pt.getChildren().addAll(cardScale, cardTranslate);
-            pt.play();
             int index = stackPane.getChildren().indexOf(actionButton);
             JFXDepthManager.setDepth(inputProfileCard, 4);
             stackPane.getChildren().add(index, inputProfileCard);

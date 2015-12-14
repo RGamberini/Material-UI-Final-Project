@@ -2,6 +2,7 @@ package sample;
 
 import com.jfoenix.controls.JFXButton;
 import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
+import javafx.animation.Interpolator;
 import javafx.animation.RotateTransition;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.BooleanProperty;
@@ -38,18 +39,14 @@ public class RudeSortButton extends JFXButton {
         }
         this.setGraphic(sortIcon);
 
-        rotate = new RotateTransition(Duration.millis(300), sortIcon);
-        rotate.setRate(1);
-        rotate.setByAngle(180);
-        rotate.setCycleCount(1);
-
         sortAscending = new SimpleBooleanProperty(true);
         this.active = new SimpleBooleanProperty(active);
         sortProperty = new SimpleStringProperty();
 
         this.setOnMouseClicked((e) -> {
             if (getActive()) {
-                rotate.play();
+                Animations.SortIconClicked.setNode(sortIcon);
+                Animations.SortIconClicked.play();
                 setSortAscending(!getSortAscending());
             } else {
                 setActive(true);

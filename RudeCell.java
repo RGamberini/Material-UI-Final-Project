@@ -11,6 +11,7 @@ import javafx.scene.layout.HBox;
  */
 public abstract class RudeCell extends HBox{
     private boolean exempt;
+    private boolean inList;
     BooleanProperty toDelete;
 
     public RudeCell() {
@@ -51,5 +52,13 @@ public abstract class RudeCell extends HBox{
 
     public void setToDelete(boolean toDelete) {
         this.toDelete.set(toDelete);
+    }
+
+    public boolean isInList() {
+        return inList;
+    }
+
+    public void setInList(boolean inList) {
+        this.inList = inList;
     }
 }
