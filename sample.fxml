@@ -22,7 +22,7 @@
    <children>
       <AnchorPane maxWidth="1.7976931348623157E308">
          <children>
-            <JFXTabPane maxWidth="1.7976931348623157E308" prefHeight="48.0" prefWidth="1008.0">
+            <JFXTabPane fx:id="tabPane" maxWidth="1.7976931348623157E308" prefHeight="48.0" prefWidth="1008.0">
                <tabs>
                   <Tab text="Students">
                     <content>

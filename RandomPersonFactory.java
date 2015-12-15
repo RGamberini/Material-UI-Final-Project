@@ -69,11 +69,15 @@ public class RandomPersonFactory {
         return "(" + randomIntRange(100, 999) + ")" + randomIntRange(100, 999) + "-" + randomIntRange(1000, 9999);
     }
 
+    public static Image randomProfilePicture() {
+        return randomElement(profileImages);
+    }
+
     public static Person randomPerson() {
         String firstName = randomElement(propertiesFromFile.get("firstname"));
         String lastName = randomElement(propertiesFromFile.get("lastname"));
         String address = randomElement(propertiesFromFile.get("address"));
-        Image profileImage = randomElement(profileImages);
+        Image profileImage = randomProfilePicture();
         return new Person(firstName, lastName, randomPhoneNumber(), address, profileImage);
     }
 }

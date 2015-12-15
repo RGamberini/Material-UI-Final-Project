@@ -30,7 +30,8 @@ public class Person extends IconCell{
     private IconCell subLabel;
     private static int c = 0;
 
-    public Person(String firstName, String lastName, String phone, String homeAddress, Image profileImage) {
+    public Person() {
+        super();
         //Initialization stuff
         propertyMap = new HashMap<>();
 
@@ -48,6 +49,10 @@ public class Person extends IconCell{
 
         this.subLabelProperty = new SimpleStringProperty();
         this.profileImage = new SimpleObjectProperty<>();
+    }
+
+    public Person(String firstName, String lastName, String phone, String homeAddress, Image profileImage) {
+        this();
 
         setFirstName(firstName);
         setLastName(lastName);

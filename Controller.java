@@ -1,10 +1,8 @@
 package sample;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXComboBox;
-import com.jfoenix.controls.JFXListCell;
-import com.jfoenix.controls.JFXListView;
+import com.jfoenix.controls.*;
 import com.jfoenix.effects.JFXDepthManager;
+import com.jfoenix.skins.JFXTabPaneSkin;
 import javafx.animation.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,6 +32,7 @@ public class Controller {
     @FXML public StackPane stackPane = new StackPane();
     @FXML public JFXButton actionButton = new JFXButton();
     @FXML public JFXComboBox<String> testComboBox = new JFXComboBox<>();
+    @FXML public JFXTabPane tabPane = new JFXTabPane();
     private ObservableList<RudeCell> listViewData = FXCollections.observableArrayList();
 
     @FXML
@@ -122,21 +121,14 @@ public class Controller {
         listViewData.sort(new RudeCellComparator(l.mainText.getSortProperty()));
         //The overview card is setup now to setup the Profile Card
 
-        URL location = getClass().getResource("profileCard.fxml");
-
-        FXMLLoader fxmlLoader = new FXMLLoader();
-        fxmlLoader.setLocation(location);
-        fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
-
-        Parent profileCard = (Parent) fxmlLoader.load(location.openStream());
-        mainContainer.setMargin(profileCard, new Insets(10, 5, 5, 10));
+        //Profile card instantiation
+        ProfileCardReusable profileCard = new ProfileCardReusable();
         mainContainer.getChildren().add(profileCard);
 
-        ProfileCardController profileCardController = fxmlLoader.getController();
 
         myListView.getSelectionModel().selectedItemProperty().addListener((o, oldVal, newVal) -> {
            if (newVal instanceof Person && listViewData.contains(newVal)) {
-               profileCardController.setMainPerson((Person) newVal);
+               profileCard.setMainPerson((Person) newVal);
             }
         });
 
@@ -145,6 +137,7 @@ public class Controller {
         l.mainText.setActive(true);
         myListView.getSelectionModel().select(1);
 
+        //Setup the event handlers
         actionButton.addEventHandler(MouseEvent.MOUSE_PRESSED, (e) -> {
             Animations.FloatingActionButtonPressed.setNode(actionButton);
             Animations.FloatingActionButtonPressed.play();
@@ -158,34 +151,22 @@ public class Controller {
         });
 
         actionButton.setOnMouseClicked((e) -> {
-            FXMLLoader _fxmlLoader = new FXMLLoader();
-            _fxmlLoader.setLocation(location);
-            _fxmlLoader.setBuilderFactory(new JavaFXBuilderFactory());
-            Parent inputProfileCard = null;
-            try {
-                inputProfileCard = (Parent) _fxmlLoader.load(location.openStream());
-            } catch (IOException e1) {
-                e1.printStackTrace();
-            }
-            mainContainer.setMargin(inputProfileCard, new Insets(10, 5, 5, 10));
-            mainContainer.getChildren().add(inputProfileCard);
+            ProfileCardInput profileCardInput = new ProfileCardInput();
 
-            ProfileCardController inputProfileCardController = _fxmlLoader.getController();
-
-            inputProfileCard.setScaleX(0);
-            inputProfileCard.setScaleY(0);
-            inputProfileCard.setTranslateX(180);
-            inputProfileCard.setTranslateY(180);
+            profileCardInput.setScaleX(0);
+            profileCardInput.setScaleY(0);
+            profileCardInput.setTranslateX(180);
+            profileCardInput.setTranslateY(180);
 
             Animations.FloatingActionButtonClicked.setNode(actionButton);
             Animations.FloatingActionButtonClicked.play();
 
-            Animations.NewCard.setNode(inputProfileCard);
+            Animations.NewCard.setNode(profileCardInput);
             Animations.NewCard.play();
 
             int index = stackPane.getChildren().indexOf(actionButton);
-            JFXDepthManager.setDepth(inputProfileCard, 4);
-            stackPane.getChildren().add(index, inputProfileCard);
+            JFXDepthManager.setDepth(profileCardInput, 4);
+            stackPane.getChildren().add(index, profileCardInput);
         });
     }
 
