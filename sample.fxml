@@ -78,12 +78,20 @@
                         <JFXListView fx:id="myListView" maxHeight="1.7976931348623157E308" minHeight="40.0" minWidth="40.0" prefHeight="360.0" prefWidth="360.0" />
                      </children>
                   </VBox>
-                  <JFXButton fx:id="actionButton" buttonType="RAISED" ripplerFill="#757575" style="-fx-background-color: #00BCD4; -fx-background-radius: 46px; -fx-min-height: 54px; -fx-min-width: 54px;" textOverrun="CLIP" StackPane.alignment="BOTTOM_RIGHT">
+                  <JFXButton fx:id="actionButtonSearch" buttonType="RAISED" ripplerFill="#757575" style="-fx-background-color: #00BCD4; -fx-background-radius: 46px; -fx-min-height: 54px; -fx-min-width: 54px;" textOverrun="CLIP" StackPane.alignment="BOTTOM_RIGHT">
+                     <graphic>
+                        <MaterialDesignIconView fill="WHITE" glyphName="MAGNIFY" size="32" />
+                     </graphic>
+                     <StackPane.margin>
+                        <Insets bottom="-30.0" right="70.0" />
+                     </StackPane.margin>
+                  </JFXButton>
+                  <JFXButton fx:id="actionButtonAdd" buttonType="RAISED" ripplerFill="#757575" style="-fx-background-color: #00BCD4; -fx-background-radius: 46px; -fx-min-height: 54px; -fx-min-width: 54px;" textOverrun="CLIP" StackPane.alignment="BOTTOM_RIGHT">
                      <graphic>
                         <MaterialDesignIconView fill="WHITE" glyphName="PLUS" size="32" />
                      </graphic>
                      <StackPane.margin>
-                        <Insets bottom="-28.0" />
+                        <Insets bottom="-30.0" />
                      </StackPane.margin>
                   </JFXButton>
                </children>

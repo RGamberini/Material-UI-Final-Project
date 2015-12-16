@@ -1,4 +1,4 @@
-.card .text {
+.card .label .text {
     -fx-fill: rgba(0,0,0,.68);
 }
 
@@ -55,11 +55,16 @@
 	-fx-opacity: 1;
 }
 
-.button-title{
+.button-title {
     -fx-padding: 0.7em 0.57em;
     -fx-font-size: 18px;
     -fx-background-color: WHITE;
+    -fx-text-fill: rgba(0,0,0,.68);
     /*-fx-text-fill: #757575;*/
+}
+
+.combo-box {
+    -fx-text-fill: rgba(0,0,0,.68);
 }
 
 .profile-card-name {
@@ -90,4 +95,29 @@
 	-fx-effect: dropshadow(gaussian, rgb(0.0, 0.0, 0.0, 0.15), 6.0, 0.7, 0.0,
 		1.5);
 	-fx-padding: 16 16 16 16;
+}
+
+.button-submit {
+    -fx-background-color: hsb(187, 100%, 84%);
+    -fx-font-size: 19px;
+    -fx-text-fill: WHITE;
+    -fx-font-weight: bold;
+}
+
+.button-submit:hover {
+    -fx-background-color: hsb(187, 100%, 86%);
+}
+
+.button-cancel {
+    -fx-background-color: WHITE;
+    -fx-font-size: 19px;
+    -fx-font-weight: bold;
+    -fx-text-fill: hsb(187, 100%, 84%);
+    -fx-border-color: rgb(0,0,0,.25);
+    -fx-border-radius: 3px;
+}
+
+.split {
+    -fx-border-color: rgb(0,0,0,.25);
+    -fx-border-style: solid hidden hidden hidden;
 }

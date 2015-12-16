@@ -46,6 +46,7 @@ public class ProfileCard extends VBox{
         HBox.setMargin(this, new Insets(10, 5, 5, 10));
         this.setPrefSize(385, 385);
         this.getStyleClass().add("card");
+        this.getStyleClass().add("profile-card");
 
         HBox tempHBox = new HBox();
         setMargin(tempHBox, new Insets(0, -16, 0, -16));

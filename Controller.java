@@ -2,35 +2,23 @@ package sample;
 
 import com.jfoenix.controls.*;
 import com.jfoenix.effects.JFXDepthManager;
-import com.jfoenix.skins.JFXTabPaneSkin;
 import javafx.animation.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.JavaFXBuilderFactory;
-import javafx.geometry.Insets;
-import javafx.scene.Parent;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
-import javafx.scene.transform.Scale;
 import javafx.util.Duration;
 
 import java.io.IOException;
-import java.net.URL;
-import java.util.Random;
-import java.util.Stack;
 
 public class Controller {
     @FXML public JFXListView<RudeCell> myListView = new JFXListView();
     @FXML public HBox mainContainer = new HBox();
     @FXML public StackPane stackPane = new StackPane();
-    @FXML public JFXButton actionButton = new JFXButton();
+    @FXML public JFXButton actionButtonAdd = new JFXButton();
+    @FXML public JFXButton actionButtonSearch = new JFXButton();
     @FXML public JFXComboBox<String> testComboBox = new JFXComboBox<>();
     @FXML public JFXTabPane tabPane = new JFXTabPane();
     private ObservableList<RudeCell> listViewData = FXCollections.observableArrayList();
@@ -137,20 +125,21 @@ public class Controller {
         l.mainText.setActive(true);
         myListView.getSelectionModel().select(1);
 
+        JFXButton[] floatingActionButtons = new JFXButton[]{actionButtonSearch, actionButtonAdd};
         //Setup the event handlers
-        actionButton.addEventHandler(MouseEvent.MOUSE_PRESSED, (e) -> {
-            Animations.FloatingActionButtonPressed.setNode(actionButton);
-            Animations.FloatingActionButtonPressed.play();
-        });
+        for (JFXButton button: floatingActionButtons) {
+            button.addEventHandler(MouseEvent.MOUSE_PRESSED, (e) -> {
+                Animations.newFloatingActionButtonPressedAnimation(button).play();
+            });
 
-        actionButton.addEventHandler(MouseEvent.MOUSE_RELEASED, (e) -> {
-            if (!actionButton.contains(e.getX(), e.getY())) {
-                Animations.FloatingActionButtonReleased.setNode(actionButton);
-                Animations.FloatingActionButtonReleased.play();
-            }
-        });
+            button.addEventHandler(MouseEvent.MOUSE_RELEASED, (e) -> {
+                if (!button.contains(e.getX(), e.getY())) {
+                    Animations.newFloatingActionButtonReleasedAnimation(button).play();
+                }
+            });
+        }
 
-        actionButton.setOnMouseClicked((e) -> {
+        actionButtonAdd.setOnMouseClicked((e) -> {
             ProfileCardInput profileCardInput = new ProfileCardInput();
 
             profileCardInput.setScaleX(0);
@@ -158,15 +147,22 @@ public class Controller {
             profileCardInput.setTranslateX(180);
             profileCardInput.setTranslateY(180);
 
-            Animations.FloatingActionButtonClicked.setNode(actionButton);
-            Animations.FloatingActionButtonClicked.play();
+            for (JFXButton _button: floatingActionButtons) {
+                Animations.newFloatingActionButtonClickedAnimation(_button).play();
+            }
 
-            Animations.NewCard.setNode(profileCardInput);
-            Animations.NewCard.play();
+            Animations.newCardAnimation(profileCardInput).play();
 
-            int index = stackPane.getChildren().indexOf(actionButton);
             JFXDepthManager.setDepth(profileCardInput, 4);
-            stackPane.getChildren().add(index, profileCardInput);
+            stackPane.getChildren().add(profileCardInput);
+
+            for (JFXButton button: profileCardInput.buttons) {
+                button.addEventHandler(MouseEvent.MOUSE_CLICKED, (_e) -> {
+                    for (JFXButton _button: floatingActionButtons) {
+                        Animations.newFloatingActionButtonRestoredAnimation(_button).play();
+                    }
+                });
+            }
         });
     }
 

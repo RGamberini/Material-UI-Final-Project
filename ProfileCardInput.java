@@ -2,15 +2,22 @@ package sample;
 
 import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.effects.JFXDepthManager;
+import de.jensd.fx.glyphs.materialicons.MaterialIcon;
+import de.jensd.fx.glyphs.materialicons.MaterialIconView;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.StringProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Paint;
 
 import java.text.RuleBasedCollator;
 import java.util.Map;
@@ -20,6 +27,8 @@ import java.util.Map;
  */
 public class ProfileCardInput extends ProfileCard {
     private Person personToBe;
+    public JFXButton submit = new JFXButton(), cancel = new JFXButton();
+    public JFXButton[] buttons = {submit, cancel};
     public ProfileCardInput() {
         super();
         personToBe = new Person();
@@ -83,5 +92,36 @@ public class ProfileCardInput extends ProfileCard {
         listViewData.sort(new RudeCellComparator("test"));
 
         //Buttons!
+        HBox buttonContainer = new HBox();
+        buttonContainer.setAlignment(Pos.CENTER_RIGHT);
+        buttonContainer.getStyleClass().add("split");
+        VBox.setMargin(buttonContainer, new Insets(10, -16, 0, -16));
+
+        for (JFXButton button: buttons) {
+            button.setMaxHeight(Double.MAX_VALUE);
+            button.setPadding(new Insets(4, 20, 4, 20));
+            button.setRipplerFill(Paint.valueOf("#757575"));
+            HBox.setMargin(button, new Insets(16, 16, 0, 0));
+
+            button.addEventHandler(MouseEvent.MOUSE_CLICKED,(e) -> Animations.newCardDestroyAnimation(this).play());
+        }
+
+        MaterialIconView send = new MaterialIconView(MaterialIcon.SEND);
+        send.setFill(Paint.valueOf("WHITE"));
+        send.setSize("22px");
+
+        submit.getStyleClass().add("button-submit");
+        submit.setText("Submit");
+
+        submit.setGraphic(send);
+        submit.setContentDisplay(ContentDisplay.RIGHT);
+        submit.setGraphicTextGap(8);
+
+        cancel.getStyleClass().add("button-cancel");
+        cancel.setText("Cancel");
+
+        buttonContainer.getChildren().addAll(cancel, submit);
+
+        this.getChildren().add(buttonContainer);
     }
 }
