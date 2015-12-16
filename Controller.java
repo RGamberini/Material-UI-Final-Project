@@ -6,22 +6,28 @@ import javafx.animation.*;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.util.Duration;
 
 import java.io.IOException;
 
 public class Controller {
     @FXML public JFXListView<RudeCell> myListView = new JFXListView();
-    @FXML public HBox mainContainer = new HBox();
+    @FXML public HBox mainHbox = new HBox();
     @FXML public StackPane stackPane = new StackPane();
     @FXML public JFXButton actionButtonAdd = new JFXButton();
     @FXML public JFXButton actionButtonSearch = new JFXButton();
     @FXML public JFXComboBox<String> testComboBox = new JFXComboBox<>();
     @FXML public JFXTabPane tabPane = new JFXTabPane();
+    @FXML public StackPane mainContainer = new StackPane();
     private ObservableList<RudeCell> listViewData = FXCollections.observableArrayList();
+
+    @FXML public VBox test = new VBox();
 
     @FXML
     public void initialize() throws IOException {
@@ -90,6 +96,9 @@ public class Controller {
             });
         });
 
+        test.setSpacing(14);
+        test.getChildren().add(0, l);
+        VBox.setMargin(l, new Insets(4, 0, 0, 0));
         testComboBox.getItems().addAll("Test", "1", "2");
 
         l.subMenuButton.sortPropertyProperty().addListener((o, oldVal, newVal) -> {
@@ -100,7 +109,9 @@ public class Controller {
                 }
             }
         });
-        listViewData.add(l);
+
+//        listViewData.add(l);
+
         for (int i = 0; i < 16; i++) {
             listViewData.add(RandomPersonFactory.randomPerson());
         }
@@ -111,7 +122,7 @@ public class Controller {
 
         //Profile card instantiation
         ProfileCardReusable profileCard = new ProfileCardReusable();
-        mainContainer.getChildren().add(profileCard);
+        mainHbox.getChildren().add(profileCard);
 
 
         myListView.getSelectionModel().selectedItemProperty().addListener((o, oldVal, newVal) -> {
@@ -147,22 +158,40 @@ public class Controller {
             profileCardInput.setTranslateX(180);
             profileCardInput.setTranslateY(180);
 
+            ParallelTransition parallelTransition = new ParallelTransition();
             for (JFXButton _button: floatingActionButtons) {
-                Animations.newFloatingActionButtonClickedAnimation(_button).play();
+                parallelTransition.getChildren().add(Animations.newFloatingActionButtonClickedAnimation(_button));
             }
 
-            Animations.newCardAnimation(profileCardInput).play();
+            parallelTransition.getChildren().add(Animations.newCardAnimation(profileCardInput));
+            parallelTransition.play();
 
+            int index = stackPane.getChildren().indexOf(myListView.getParent());
             JFXDepthManager.setDepth(profileCardInput, 4);
-            stackPane.getChildren().add(profileCardInput);
+            stackPane.getChildren().add(index + 1, profileCardInput);
 
-            for (JFXButton button: profileCardInput.buttons) {
-                button.addEventHandler(MouseEvent.MOUSE_CLICKED, (_e) -> {
-                    for (JFXButton _button: floatingActionButtons) {
-                        Animations.newFloatingActionButtonRestoredAnimation(_button).play();
-                    }
-                });
-            }
+            profileCardInput.setOnClear((clear) -> {
+                ParallelTransition buttonRestore = new ParallelTransition();
+                for (JFXButton _button : floatingActionButtons) {
+                    buttonRestore.getChildren().add(Animations.newFloatingActionButtonRestoredAnimation(_button));
+                }
+                ParallelTransition cardDestroy = Animations.newCardDestroyAnimation(profileCardInput);
+                //cardDestroy.setOnFinished((_e) -> buttonRestore.play());
+                cardDestroy.play();
+                buttonRestore.play();
+            });
+
+            profileCardInput.setOnError((error) -> {
+                RudeErrorPane errorPane = new RudeErrorPane();
+                JFXDialog dialog =  new JFXDialog( mainContainer, errorPane, JFXDialog.DialogTransition.CENTER);
+                errorPane.button.setOnMouseClicked((_e) -> dialog.close());
+                dialog.show();
+            });
+
+            profileCardInput.setOnAccept((accept) -> {
+                listViewData.add(profileCardInput.getPersonToBe());
+                sort(l.activeButtonProperty().get(), l.activeButtonProperty().get().getSortAscending());
+            });
         });
     }
 

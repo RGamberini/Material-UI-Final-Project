@@ -36,6 +36,13 @@
     -fx-background-radius: 2em;
 }
 
+.mylistview .list-cell:even:selected {
+    -fx-background-color: inherit;
+}
+.mylistview .list-cell:odd:selected {
+    -fx-background-color: inherit;
+}
+
 .edit {
 	-fx-fill: #F1C40F;
 }
@@ -99,7 +106,7 @@
 
 .button-submit {
     -fx-background-color: hsb(187, 100%, 84%);
-    -fx-font-size: 19px;
+    -fx-font-size: 16px;
     -fx-text-fill: WHITE;
     -fx-font-weight: bold;
 }
@@ -110,7 +117,7 @@
 
 .button-cancel {
     -fx-background-color: WHITE;
-    -fx-font-size: 19px;
+    -fx-font-size: 16px;
     -fx-font-weight: bold;
     -fx-text-fill: hsb(187, 100%, 84%);
     -fx-border-color: rgb(0,0,0,.25);

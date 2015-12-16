@@ -80,7 +80,8 @@ public class IconCell extends RudeCell {
     public static void switchStyleClass(Node node, String style1, String style2) {
         ObservableList<String> nodeStyle = node.getStyleClass();
         if (nodeStyle.contains(style1)) {
-            nodeStyle.set(nodeStyle.indexOf(style1), style2);
+            nodeStyle.removeAll(style1);
+            nodeStyle.add(style2);
             return;
         }
     }

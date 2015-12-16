@@ -1,25 +1,23 @@
 package sample;
 
 import com.jfoenix.controls.JFXButton;
+import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXTextField;
-import com.jfoenix.effects.JFXDepthManager;
 import de.jensd.fx.glyphs.materialicons.MaterialIcon;
 import de.jensd.fx.glyphs.materialicons.MaterialIconView;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Label;
-import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 
-import java.text.RuleBasedCollator;
 import java.util.Map;
 
 /**
@@ -29,11 +27,14 @@ public class ProfileCardInput extends ProfileCard {
     private Person personToBe;
     public JFXButton submit = new JFXButton(), cancel = new JFXButton();
     public JFXButton[] buttons = {submit, cancel};
+
     public ProfileCardInput() {
         super();
         personToBe = new Person();
         profileImage.imageProperty().bind(personToBe.profileImageProperty());
         personToBe.setProfileImage(RandomPersonFactory.randomProfilePicture());
+        personToBe.setFirstName("");
+        personToBe.setLastName("");
 
         name.getChildren().remove(name.mainLabel);
         name.setStyle("-fx-border-style: hidden hidden hidden hidden;");
@@ -52,6 +53,7 @@ public class ProfileCardInput extends ProfileCard {
                             personToBe.setLastName(_newVal.substring(i).trim());
                         } else {
                             personToBe.setFirstName(_newVal.trim());
+                            personToBe.setLastName("");
                         }
                     });
                 } else {
@@ -102,20 +104,18 @@ public class ProfileCardInput extends ProfileCard {
             button.setPadding(new Insets(4, 20, 4, 20));
             button.setRipplerFill(Paint.valueOf("#757575"));
             HBox.setMargin(button, new Insets(16, 16, 0, 0));
-
-            button.addEventHandler(MouseEvent.MOUSE_CLICKED,(e) -> Animations.newCardDestroyAnimation(this).play());
         }
 
         MaterialIconView send = new MaterialIconView(MaterialIcon.SEND);
         send.setFill(Paint.valueOf("WHITE"));
-        send.setSize("22px");
+        send.setSize("19px");
 
         submit.getStyleClass().add("button-submit");
         submit.setText("Submit");
 
         submit.setGraphic(send);
         submit.setContentDisplay(ContentDisplay.RIGHT);
-        submit.setGraphicTextGap(8);
+        submit.setGraphicTextGap(5);
 
         cancel.getStyleClass().add("button-cancel");
         cancel.setText("Cancel");
@@ -123,5 +123,51 @@ public class ProfileCardInput extends ProfileCard {
         buttonContainer.getChildren().addAll(cancel, submit);
 
         this.getChildren().add(buttonContainer);
+
+        //Event handling
+        cancel.addEventHandler(MouseEvent.MOUSE_CLICKED, (e)->onCardClearProperty.get().handle(new FloatingCardEvent(FloatingCardEvent.CLEAR)));
+        submit.addEventHandler(MouseEvent.MOUSE_CLICKED, (e) -> {
+            if (RudeValidator.validate(personToBe.propertyMap)) {
+                onCardAcceptProperty.get().handle(new FloatingCardEvent(FloatingCardEvent.ACCEPT));
+                onCardClearProperty.get().handle(new FloatingCardEvent(FloatingCardEvent.CLEAR));
+            } else {
+                onCardErrorProperty.get().handle(new FloatingCardEvent(FloatingCardEvent.ERROR));
+            }
+        });
+    }
+
+    public Person getPersonToBe() {
+        return personToBe;
+    }
+
+    //Custom events
+    private ObjectProperty<EventHandler<? super FloatingCardEvent>> onCardClearProperty = new SimpleObjectProperty<>((clear)-> {});
+
+    public EventHandler<? super FloatingCardEvent> getOnClear() {
+        return onCardClearProperty.get();
+    }
+
+    public void setOnClear(EventHandler<? super FloatingCardEvent> handler) {
+        this.onCardClearProperty.set(handler);
+    }
+
+    private ObjectProperty<EventHandler<? super FloatingCardEvent>> onCardErrorProperty = new SimpleObjectProperty<>((error)-> {});
+
+    public EventHandler<? super FloatingCardEvent> getOnError() {
+        return onCardErrorProperty.get();
+    }
+
+    public void setOnError(EventHandler<? super FloatingCardEvent> handler) {
+        this.onCardErrorProperty.set(handler);
+    }
+
+    private ObjectProperty<EventHandler<? super FloatingCardEvent>> onCardAcceptProperty = new SimpleObjectProperty<>((accept)-> {});
+
+    public EventHandler<? super FloatingCardEvent> getOnAccept() {
+        return onCardAcceptProperty.get();
+    }
+
+    public void setOnAccept(EventHandler<? super FloatingCardEvent> handler) {
+        this.onCardAcceptProperty.set(handler);
     }
 }

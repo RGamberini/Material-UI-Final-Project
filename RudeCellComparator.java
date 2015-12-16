@@ -13,6 +13,7 @@ public class RudeCellComparator implements Comparator<Node>{
     public RudeCellComparator(String sortProperty) {
         this.sortProperty = sortProperty;
     }
+    private static int i = 0;
 
     @Override
     public int compare(Node o1, Node o2) {
@@ -27,6 +28,7 @@ public class RudeCellComparator implements Comparator<Node>{
             return (n != 0) ? n : mainLabel1.compareTo(mainLabel2);
         }
         else if(o1 instanceof TitleCell || o2 instanceof TitleCell) {
+            //System.out.println(i++);
             return 0;
         }
 //        else if(o1 instanceof IconCell && o2 instanceof IconCell) {

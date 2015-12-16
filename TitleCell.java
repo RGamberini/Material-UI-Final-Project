@@ -27,7 +27,7 @@ public class TitleCell extends RudeCell{
 
     public TitleCell(String mainText) {
         super();
-        this.setExempt(true);
+        //this.setExempt(true);
 
         this.mainText = new RudeSortButton(true);
         this.mainText.setText(mainText);

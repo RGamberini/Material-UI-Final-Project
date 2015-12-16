@@ -49,6 +49,8 @@ public class Person extends IconCell{
 
         this.subLabelProperty = new SimpleStringProperty();
         this.profileImage = new SimpleObjectProperty<>();
+
+        layoutInit();
     }
 
     public Person(String firstName, String lastName, String phone, String homeAddress, Image profileImage) {
@@ -60,7 +62,9 @@ public class Person extends IconCell{
         setHomeAddress(homeAddress);
         setProfileImage(profileImage);
         //End Initialization stuff
+    }
 
+    private void layoutInit() {
         //The down and dirty
         this.mainLabel.textProperty().bind(Bindings.concat(firstNameProperty(), " ", lastNameProperty()));
 
