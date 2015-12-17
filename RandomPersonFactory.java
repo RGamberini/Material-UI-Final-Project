@@ -24,6 +24,7 @@ public class RandomPersonFactory {
         rng = new Random();
         for (String strin: RANDOMFILES) {
             try {
+                System.out.println(strin);
                 BufferedReader in = new BufferedReader(new FileReader(new File(RandomPersonFactory.class.getResource(strin).toURI())));
                 ArrayList<String> temp = new ArrayList<>();
                 String line;

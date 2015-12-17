@@ -14,6 +14,10 @@ import javafx.scene.layout.Priority;
 import javafx.util.Duration;
 import jdk.nashorn.internal.ir.annotations.Ignore;
 
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Set;
+
 /**
  * Created by Nick on 12/8/2015.
  */
@@ -26,14 +30,14 @@ public class TitleCell extends RudeCell{
 
     private ObjectProperty<RudeSortButton> activeButton;
 
-    public TitleCell(String mainText) {
+    public TitleCell(String mainText, String mainSortProperty, Set<String> properties) {
         super();
         //this.setExempt(true);
         this.setMinHeight(25);
 
         this.mainText = new RudeSortButton(true);
         this.mainText.setText(mainText);
-        this.mainText.setSortProperty(Person.properties.get(Person.properties.indexOf("Last Name")));
+        this.mainText.setSortProperty(mainSortProperty);
         HBox.setMargin(this.mainText, new Insets(0,0,0,-13));
 
         this.setHgrow(this.mainText, Priority.ALWAYS);
@@ -44,11 +48,8 @@ public class TitleCell extends RudeCell{
         this.getChildren().add(subMenuButton);
 
         subMenu = new JFXComboBox<>();
-        subMenu.getItems().addAll(Person.properties);
-//        subMenu.setPrefWidth(125);
-//        subMenu.getSelectionModel().selectedItemProperty().addListener((o, oldVal, newVal) -> {
-//            subMenu.prefWidthProperty().unbind();
-//        });
+        subMenu.getItems().addAll(properties);
+        subMenu.getItems().sort(String::compareToIgnoreCase);
 
         this.setMargin(subMenu, new Insets(0, 10, 0, 0));
         this.getChildren().add(subMenu);

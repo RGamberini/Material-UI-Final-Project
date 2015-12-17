@@ -1,7 +1,6 @@
 package sample;
 
 import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXDialog;
 import com.jfoenix.controls.JFXTextField;
 import de.jensd.fx.glyphs.materialicons.MaterialIcon;
 import de.jensd.fx.glyphs.materialicons.MaterialIconView;
@@ -24,59 +23,40 @@ import java.util.Map;
  * Created by Nick on 12/14/2015.
  */
 public class ProfileCardInput extends ProfileCard {
-    private Person personToBe;
+    private RudeObject personToBe;
     public JFXButton submit = new JFXButton(), cancel = new JFXButton();
     public JFXButton[] buttons = {submit, cancel};
 
-    public ProfileCardInput() {
+    public ProfileCardInput(Class<? extends RudeObject> cls) {
         super();
-        personToBe = new Person();
+        try {
+            personToBe = cls.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
         profileImage.imageProperty().bind(personToBe.profileImageProperty());
         personToBe.setProfileImage(RandomPersonFactory.randomProfilePicture());
-        personToBe.setFirstName("");
-        personToBe.setLastName("");
 
         name.getChildren().remove(name.mainLabel);
         name.setStyle("-fx-border-style: hidden hidden hidden hidden;");
         JFXTextField nameField = new JFXTextField();
         nameField.setPromptText("Name");
         name.getChildren().add(nameField);
-        ChangeListener nameListener = new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> o, Boolean oldVal, Boolean newVal) {
-                if (newVal) {
-                    nameField.textProperty().unbind();
-                    nameField.textProperty().addListener((_o, _oldVal, _newVal) -> {
-                        int i = _newVal.indexOf(" ");
-                        if (i > -1 && i < _newVal.length() - 1) {
-                            personToBe.setFirstName(_newVal.substring(0, i).trim());
-                            personToBe.setLastName(_newVal.substring(i).trim());
-                        } else {
-                            personToBe.setFirstName(_newVal.trim());
-                            personToBe.setLastName("");
-                        }
-                    });
-                } else {
-                    nameField.textProperty().bind(Bindings.concat(personToBe.firstNameProperty(), " ", personToBe.lastNameProperty()));
-                }
-            }
-        };
-        nameField.focusedProperty().addListener(nameListener);
 
-        phone.getChildren().remove(phone.mainLabel);
-        phone.setStyle("-fx-border-style: hidden hidden hidden hidden;");
-        JFXTextField phoneField = new JFXTextField();
-        personToBe.phoneProperty().bindBidirectional(phoneField.textProperty());
-        phoneField.setPromptText("Phone");
-        phone.getChildren().add(phoneField);
+        headerCell1.getChildren().remove(headerCell1.mainLabel);
+        headerCell1.setStyle("-fx-border-style: hidden hidden hidden hidden;");
+        JFXTextField headerCell1Field = new JFXTextField();
+        headerCell1.getChildren().add(headerCell1Field);
 
-        address.getChildren().remove(address.mainLabel);
-        address.setStyle("-fx-border-style: hidden hidden hidden hidden;");
-        JFXTextField addressField = new JFXTextField();
-        personToBe.homeAddressProperty().bindBidirectional(addressField.textProperty());
-        addressField.setPromptText("Address");
-        address.getChildren().add(addressField);
+        headerCell2.getChildren().remove(headerCell2.mainLabel);
+        headerCell2.setStyle("-fx-border-style: hidden hidden hidden hidden;");
+        JFXTextField headerCell2Field = new JFXTextField();
+        headerCell2.getChildren().add(headerCell2Field);
 
+        personToBe.initInputHeader(nameField, headerCell1Field, headerCell2Field);
         for (Map.Entry<String, StringProperty> entry: personToBe.propertyMap.entrySet()) {
             IconCell cell = new IconCell();
             cell.mainLabel.setText(entry.getKey());
@@ -136,7 +116,7 @@ public class ProfileCardInput extends ProfileCard {
         });
     }
 
-    public Person getPersonToBe() {
+    public RudeObject getPersonToBe() {
         return personToBe;
     }
 

@@ -2,14 +2,21 @@ package sample;
 
 import com.jfoenix.controls.JFXTextField;
 import com.sun.javafx.collections.MappingChange;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
+import de.jensd.fx.glyphs.materialicons.MaterialIcon;
+import de.jensd.fx.glyphs.materialicons.MaterialIconView;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
 import javafx.scene.Cursor;
 import javafx.scene.control.Label;
+import javafx.scene.control.OverrunStyle;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseEvent;
@@ -22,11 +29,8 @@ import java.util.Map;
 /**
  * Created by Nick on 12/9/2015.
  */
-public class Person extends IconCell{
-    private StringProperty firstName, lastName, phone, homeAddress, subLabelProperty;
-    private ObjectProperty<Image> profileImage;
-    public Map<String, StringProperty> propertyMap;
-    public static ArrayList<String> properties;
+public class Person extends RudeObject {
+    private StringProperty firstName, lastName, phone, homeAddress;
     private IconCell subLabel;
     private static int c = 0;
 
@@ -98,13 +102,83 @@ public class Person extends IconCell{
             subLabel.mainLabel.textProperty().bind(this.propertyMap.get(newVal));
         });
     }
+    public void initHeader() {
 
-    static {
-        properties = new ArrayList<>();
-        properties.add("First Name");
-        properties.add("Last Name");
-        properties.add("Phone");
-        properties.add("Home Address");
+    }
+
+    @Override
+    public void initHeader(IconCell name, IconCell headerCell1, IconCell headerCell2) {
+        name.mainLabel.textProperty().bind(Bindings.concat(this.firstNameProperty(), " ", this.lastNameProperty()));
+        name.icons.clear();
+        name.icons.add(new RudeEditIcon(name, name.mainLabel) {
+            @Override
+            public void assignText(String text) {
+                int i = text.indexOf(" ");
+                setFirstName(text.substring(0, i));
+                setLastName(text.substring(i + 1));
+            }
+        });
+
+        headerCell1.mainLabel.textProperty().bind(this.phoneProperty());
+        headerCell1.icons.clear();
+        headerCell1.icons.add(new RudeEditIcon(headerCell1, headerCell1.mainLabel, this.phoneProperty()));
+
+        FontAwesomeIconView phoneIcon = new FontAwesomeIconView(FontAwesomeIcon.PHONE_SQUARE);
+        phoneIcon.setStyleClass("profile-card-icon");
+        phoneIcon.setSize("22");
+        headerCell1.mainLabel.setGraphic(phoneIcon);
+
+        headerCell2.mainLabel.textProperty().bind(this.homeAddressProperty());
+        headerCell2.icons.clear();
+        headerCell2.icons.add(new RudeEditIcon(headerCell2, headerCell2.mainLabel, this.homeAddressProperty()));
+
+        MaterialIconView addressIcon = new MaterialIconView(MaterialIcon.PLACE);
+        addressIcon.setStyleClass("profile-card-icon");
+        addressIcon.setSize("25");
+        headerCell2.mainLabel.setGraphic(addressIcon);
+    }
+
+    @Override
+    public void initInputHeader(JFXTextField nameField, JFXTextField headerCell1Field, JFXTextField headerCell2Field) {
+        setFirstName("");
+        setLastName("");
+        ChangeListener nameListener = new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> o, Boolean oldVal, Boolean newVal) {
+                if (newVal) {
+                    nameField.textProperty().unbind();
+                    nameField.textProperty().addListener((_o, _oldVal, _newVal) -> {
+                        int i = _newVal.indexOf(" ");
+                        if (i > -1 && i < _newVal.length() - 1) {
+                            setFirstName(_newVal.substring(0, i).trim());
+                            setLastName(_newVal.substring(i).trim());
+                        } else {
+                            setFirstName(_newVal.trim());
+                            setLastName("");
+                        }
+                    });
+                } else {
+                    nameField.textProperty().bind(Bindings.concat(firstNameProperty(), " ", lastNameProperty()));
+                }
+            }
+        };
+        nameField.focusedProperty().addListener(nameListener);
+
+        phoneProperty().bindBidirectional(headerCell1Field.textProperty());
+        headerCell1Field.setPromptText("Phone");
+
+        homeAddressProperty().bindBidirectional(headerCell2Field.textProperty());
+        headerCell2Field.setPromptText("Address");
+    }
+
+    @Override
+    public String getDEFAULT_SORT_PROPERTY() {
+        return "Last Name";
+    }
+
+    @Override
+    public RudeObject randomInstance() {
+        return RandomPersonFactory.randomPerson();
     }
 
     @Override
@@ -177,29 +251,5 @@ public class Person extends IconCell{
 
     public void setHomeAddress(String homeAddress) {
         this.homeAddress.set(homeAddress);
-    }
-
-    public String getSubLabelProperty() {
-        return subLabelProperty.get();
-    }
-
-    public StringProperty subLabelPropertyProperty() {
-        return subLabelProperty;
-    }
-
-    public void setSubLabelProperty(String subLabelProperty) {
-        this.subLabelProperty.set(subLabelProperty);
-    }
-
-    public Image getProfileImage() {
-        return profileImage.get();
-    }
-
-    public ObjectProperty<Image> profileImageProperty() {
-        return profileImage;
-    }
-
-    public void setProfileImage(Image profileImage) {
-        this.profileImage.set(profileImage);
     }
 }

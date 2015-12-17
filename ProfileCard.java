@@ -6,16 +6,10 @@ import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialicons.MaterialIcon;
 import de.jensd.fx.glyphs.materialicons.MaterialIconView;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
-import javafx.scene.control.Label;
 import javafx.scene.control.OverrunStyle;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
@@ -27,8 +21,6 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.StrokeType;
 
-import java.util.Map;
-
 /**
  * Created by Nick on 12/14/2015.
  */
@@ -36,7 +28,7 @@ public class ProfileCard extends VBox{
     protected JFXListView<Node> propertyList;
     protected VBox headerVbox;
     protected ImageView profileImage;
-    protected IconCell name, phone, address;
+    protected IconCell name, headerCell1, headerCell2;
 
     protected ObservableList<Node> listViewData = FXCollections.observableArrayList();
     protected IconCell[] cells;
@@ -96,23 +88,15 @@ public class ProfileCard extends VBox{
         name = new IconCell();
         name.getStyleClass().add("profile-card-name");
 
-        phone = new IconCell();
-        phone.getStyleClass().add("profile-card-heading");
-        FontAwesomeIconView phoneIcon = new FontAwesomeIconView(FontAwesomeIcon.PHONE_SQUARE);
-        phoneIcon.setStyleClass("profile-card-icon");
-        phoneIcon.setSize("22");
-        phone.mainLabel.setGraphic(phoneIcon);
+        headerCell1 = new IconCell();
+        headerCell1.getStyleClass().add("profile-card-heading");
 
-        address = new IconCell();
-        address.mainLabel.setWrapText(true);
-        address.mainLabel.setTextOverrun(OverrunStyle.CLIP);
-        address.getStyleClass().add("profile-card-heading");
-        MaterialIconView addressIcon = new MaterialIconView(MaterialIcon.PLACE);
-        addressIcon.setStyleClass("profile-card-icon");
-        addressIcon.setSize("25");
-        address.mainLabel.setGraphic(addressIcon);
+        headerCell2 = new IconCell();
+        headerCell2.mainLabel.setWrapText(true);
+        headerCell2.mainLabel.setTextOverrun(OverrunStyle.CLIP);
+        headerCell2.getStyleClass().add("profile-card-heading");
 
-        cells = new IconCell[]{name, phone, address};
+        cells = new IconCell[]{name, headerCell1, headerCell2};
         this.headerVbox.getChildren().addAll(cells);
 
         propertyList.setItems(listViewData);

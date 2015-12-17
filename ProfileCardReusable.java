@@ -13,33 +13,15 @@ import java.util.Map;
  * Created by Nick on 12/14/2015.
  */
 public class ProfileCardReusable extends ProfileCard {
-    private ObjectProperty<Person> mainPerson;
+    private ObjectProperty<RudeObject> mainRudeObject;
     public ProfileCardReusable() {
         super();
-        mainPerson = new SimpleObjectProperty<>();
-        mainPersonProperty().addListener((o, oldVal, newVal) -> changeCard(newVal));
+        mainRudeObject = new SimpleObjectProperty<>();
+        mainRudeObjectProperty().addListener((o, oldVal, newVal) -> changeCard(newVal));
     }
 
-    private void changeCard(Person person) {
-        name.mainLabel.textProperty().bind(Bindings.concat(person.firstNameProperty(), " ", person.lastNameProperty()));
-        name.icons.clear();
-        name.icons.add(new RudeEditIcon(name, name.mainLabel) {
-            @Override
-            public void assignText(String text) {
-                int i = text.indexOf(" ");
-                person.setFirstName(text.substring(0, i));
-                person.setLastName(text.substring(i + 1));
-            }
-        });
-
-        phone.mainLabel.textProperty().bind(person.phoneProperty());
-        phone.icons.clear();
-        phone.icons.add(new RudeEditIcon(phone, phone.mainLabel, person.phoneProperty()));
-
-        address.mainLabel.textProperty().bind(person.homeAddressProperty());
-        address.icons.clear();
-        address.icons.add(new RudeEditIcon(address, address.mainLabel, person.homeAddressProperty()));
-
+    private void changeCard(RudeObject person) {
+        person.initHeader(name, headerCell1, headerCell2);
         profileImage.imageProperty().bind(person.profileImageProperty());
 
         listViewData.clear();
@@ -57,15 +39,15 @@ public class ProfileCardReusable extends ProfileCard {
             listViewData.add(cell);
         }
     }
-    public Person getMainPerson() {
-        return mainPerson.get();
+    public RudeObject getMainRudeObject() {
+        return mainRudeObject.get();
     }
 
-    public ObjectProperty<Person> mainPersonProperty() {
-        return mainPerson;
+    public ObjectProperty<RudeObject> mainRudeObjectProperty() {
+        return mainRudeObject;
     }
 
-    public void setMainPerson(Person mainPerson) {
-        this.mainPerson.set(mainPerson);
+    public void setMainRudeObject(RudeObject mainRudeObject) {
+        this.mainRudeObject.set(mainRudeObject);
     }
 }

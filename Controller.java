@@ -27,7 +27,7 @@ public class Controller {
         JFXDialog dialog =  new JFXDialog(mainContainer, errorPane, JFXDialog.DialogTransition.CENTER);
         errorPane.button.setOnMouseClicked((_e) -> dialog.close());
 
-        MainListCard mainListCard = new MainListCard(dialog);
+        MainListCard mainListCard = new MainListCard(dialog, Person.class);
         mainHbox.getChildren().add(mainListCard);
         //Profile card instantiation
         ProfileCardReusable profileCard = new ProfileCardReusable();
@@ -36,7 +36,7 @@ public class Controller {
 
         mainListCard.myListView.getSelectionModel().selectedItemProperty().addListener((o, oldVal, newVal) -> {
             if (mainListCard.listViewData.contains(newVal)) {
-                profileCard.setMainPerson(newVal);
+                profileCard.setMainRudeObject(newVal);
             }
         });
 

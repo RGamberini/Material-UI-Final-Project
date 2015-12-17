@@ -12,6 +12,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 
+import java.util.Set;
+
 /**
  * Created by Nick on 12/16/2015.
  */
@@ -19,13 +21,11 @@ public class SearchCard extends VBox {
     private JFXComboBox<String> propertyList;
     private JFXTextField searchInput;
     private JFXListView searchResultView;
-    private ObservableList<Person> searchResultData;
-    private ObservableList<Person> fullSetData;
+    private ObservableList<RudeObject> searchResultData;
     private StringProperty searchProperty;
 
-    public SearchCard(ObservableList<Person> fullSetData) {
+    public SearchCard(ObservableList<RudeObject> fullSetData, Set<String> properties) {
         super();
-        this.fullSetData = fullSetData;
         searchProperty = new SimpleStringProperty();
 
         HBox.setMargin(this, new Insets(10, 5, 5, 10));
@@ -36,7 +36,7 @@ public class SearchCard extends VBox {
         this.getChildren().add(tempHbox);
 
         propertyList = new JFXComboBox<>();
-        propertyList.getItems().addAll(Person.properties);
+        propertyList.getItems().addAll(properties);
         HBox.setMargin(propertyList, new Insets(0, 15, 0, 0));
 
         searchInput = new JFXTextField();
@@ -60,7 +60,7 @@ public class SearchCard extends VBox {
         searchInput.textProperty().addListener((o, oldVal, searchTerm) -> {
             searchResultData.clear();
             if (!searchTerm.equals("")) {
-                for (Person person : fullSetData) {
+                for (RudeObject person : fullSetData) {
                     if (containsIgnoreCase(person.propertyMap.get(getSearchProperty()).getValue(), searchTerm)) {
                         searchResultData.add(person);
                         person.setSubLabelProperty(getSearchProperty());

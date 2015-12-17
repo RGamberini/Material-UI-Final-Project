@@ -7,6 +7,7 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.animation.ParallelTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
+import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -21,22 +22,36 @@ import javafx.scene.paint.Paint;
 import javafx.util.Duration;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by Nick on 12/16/2015.
  */
-public class MainListCard  extends StackPane {
-    public JFXListView<Person> myListView = new JFXListView();
+public class MainListCard extends StackPane {
+    public JFXListView<RudeObject> myListView = new JFXListView();
     public JFXButton actionButtonAdd = new JFXButton();
     public JFXButton actionButtonSearch = new JFXButton();
     public JFXTabPane tabPane = new JFXTabPane();
     public VBox mainVbox = new VBox();
-    public ObservableList<Person> listViewData = FXCollections.observableArrayList();
+    public ObservableList<RudeObject> listViewData = FXCollections.observableArrayList();
     public TitleCell titleCell;
+    public Class<? extends RudeObject> currentClass;
+    private RudeObject blank;
 
-    public MainListCard(JFXDialog dialog) throws IOException {
+    public MainListCard(JFXDialog dialog, Class<? extends RudeObject> currentClass) throws IOException {
         super();
         this.setAlignment(Pos.BOTTOM_RIGHT);
+        this.currentClass = currentClass;
+        try {
+            blank = currentClass.newInstance();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
 
         HBox.setMargin(this, new Insets(10, 5, 10, 16));
 
@@ -125,7 +140,7 @@ public class MainListCard  extends StackPane {
         });
         myListView.getStyleClass().add("mylistview");
 
-        titleCell = new TitleCell("Name");
+        titleCell = new TitleCell("Name", blank.getDEFAULT_SORT_PROPERTY(), blank.propertyMap.keySet());
         titleCell.activeButtonProperty().addListener((o, oldVal, newVal) -> {
             sort(newVal, newVal.getSortAscending());
             newVal.sortAscendingProperty().addListener((_o, _oldVal, _newVal) -> {
@@ -142,15 +157,13 @@ public class MainListCard  extends StackPane {
         VBox.setMargin(titleCell, new Insets(4, 0, 0, 0));
 
         titleCell.subMenuButton.sortPropertyProperty().addListener((o, oldVal, newVal) -> {
-            for (Person cell: listViewData) {
+            for (RudeObject cell: listViewData) {
                 cell.setSubLabelProperty(newVal);
             }
         });
 
-//        listViewData.add(l);
-
         for (int i = 0; i < 16; i++) {
-            listViewData.add(RandomPersonFactory.randomPerson());
+            listViewData.add(blank.randomInstance());
         }
 
         myListView.setItems(listViewData);
@@ -172,7 +185,7 @@ public class MainListCard  extends StackPane {
         }
 
         actionButtonAdd.setOnMouseClicked((e) -> {
-            ProfileCardInput profileCardInput = new ProfileCardInput();
+            ProfileCardInput profileCardInput = new ProfileCardInput(currentClass);
 
             profileCardInput.setScaleX(0);
             profileCardInput.setScaleY(0);
@@ -207,7 +220,7 @@ public class MainListCard  extends StackPane {
             });
 
             profileCardInput.setOnAccept((accept) -> {
-                Person personToBe = profileCardInput.getPersonToBe();
+                RudeObject personToBe = profileCardInput.getPersonToBe();
                 personToBe.setSubLabelProperty(titleCell.subMenuButton.getSortProperty());
                 listViewData.add(personToBe);
                 sort(titleCell.activeButtonProperty().get(), titleCell.activeButtonProperty().get().getSortAscending());
@@ -215,7 +228,7 @@ public class MainListCard  extends StackPane {
         });
 
         actionButtonSearch.setOnMouseClicked((e) -> {
-            SearchCard searchCard = new SearchCard(listViewData);
+            SearchCard searchCard = new SearchCard(listViewData, blank.propertyMap.keySet());
 
             searchCard.setScaleX(0);
             searchCard.setScaleY(0);
