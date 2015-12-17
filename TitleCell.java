@@ -9,6 +9,7 @@ import javafx.beans.property.*;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Node;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.util.Duration;
 import jdk.nashorn.internal.ir.annotations.Ignore;
@@ -28,10 +29,12 @@ public class TitleCell extends RudeCell{
     public TitleCell(String mainText) {
         super();
         //this.setExempt(true);
+        this.setMinHeight(25);
 
         this.mainText = new RudeSortButton(true);
         this.mainText.setText(mainText);
         this.mainText.setSortProperty(Person.properties.get(Person.properties.indexOf("Last Name")));
+        HBox.setMargin(this.mainText, new Insets(0,0,0,-13));
 
         this.setHgrow(this.mainText, Priority.ALWAYS);
         this.activeButton = new SimpleObjectProperty<>();
@@ -42,6 +45,10 @@ public class TitleCell extends RudeCell{
 
         subMenu = new JFXComboBox<>();
         subMenu.getItems().addAll(Person.properties);
+//        subMenu.setPrefWidth(125);
+//        subMenu.getSelectionModel().selectedItemProperty().addListener((o, oldVal, newVal) -> {
+//            subMenu.prefWidthProperty().unbind();
+//        });
 
         this.setMargin(subMenu, new Insets(0, 10, 0, 0));
         this.getChildren().add(subMenu);

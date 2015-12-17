@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+
+<Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="267.0" style="-fx-padding: 16px;" styleClass="card" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox alignment="TOP_RIGHT" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="200.0" prefWidth="267.0" spacing="14.0">
+         <children>
+            <Label alignment="TOP_LEFT" maxWidth="1.7976931348623157E308" style="-fx-text-fill: BLACK;" text="Properties are blank" textFill="#f44336" wrapText="true">
+               <font>
+                  <Font name="System Bold" size="19.0" />
+               </font>
+               <VBox.margin>
+                  <Insets />
+               </VBox.margin>
+            </Label>
+            <Label maxWidth="1.7976931348623157E308" text="Some properties of this form have been left blank. Please fill them before continuing." wrapText="true">
+               <font>
+                  <Font size="17.0" />
+               </font>
+               <VBox.margin>
+                  <Insets top="-10.0" />
+               </VBox.margin>
+            </Label>
+            <JFXButton alignment="CENTER_RIGHT" style="-fx-border-style: hidden hidden hidden hidden;" styleClass="button-cancel" text="Accept" VBox.vgrow="ALWAYS" />
+         </children>
+         <padding>
+            <Insets left="24.0" right="24.0" top="20.0" />
+         </padding>
+      </VBox>
+   </children>
+</Pane>

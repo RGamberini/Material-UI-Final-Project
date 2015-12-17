@@ -20,7 +20,7 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("sample.fxml"));
         Parent root = (Parent) loader.load();
 
-        Scene scene = new Scene(root, 1000, 500);
+        Scene scene = new Scene(root, 816, 500);
 //        scene.getStylesheets().add(getClass().getResource("material-fx-v0_3.css").toExternalForm());
         scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         //scene.addEventFilter(MouseEvent.MOUSE_CLICKED, (e) -> System.out.println("meme1"));

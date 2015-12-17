@@ -45,7 +45,7 @@ public class RudeSortButton extends JFXButton {
 
         this.setOnMouseClicked((e) -> {
             if (getActive()) {
-                Animations.newSortIconClickedAnimation(sortIcon).play();
+                Animations.newSortIconClickedAnimation(sortIcon, !getSortAscending()).play();
                 setSortAscending(!getSortAscending());
             } else {
                 setActive(true);

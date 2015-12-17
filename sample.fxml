@@ -24,7 +24,7 @@
          <children>
             <AnchorPane maxWidth="1.7976931348623157E308">
                <children>
-                  <JFXTabPane fx:id="tabPane" maxWidth="1.7976931348623157E308" prefHeight="48.0" prefWidth="1008.0">
+                  <JFXTabPane fx:id="tabPane" maxWidth="1.7976931348623157E308" prefHeight="48.0" prefWidth="816.0">
                      <tabs>
                         <Tab text="Students">
                           <content>
@@ -54,52 +54,7 @@
                   </JFXTabPane>
                </children>
             </AnchorPane>
-            <HBox fx:id="mainHbox" maxHeight="-Infinity" maxWidth="-Infinity">
-               <children>
-                  <VBox fx:id="inputVBOX" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="40.0" minWidth="40.0" styleClass="card">
-                     <children>
-                        <JFXTextField promptText="First Name">
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                        </JFXTextField>
-                        <JFXTextField promptText="Last Name" />
-                        <JFXComboBox fx:id="testComboBox" />
-                     </children>
-                     <HBox.margin>
-                        <Insets bottom="10.0" left="10.0" right="5.0" top="10.0" />
-                     </HBox.margin>
-                  </VBox>
-                  <StackPane fx:id="stackPane">
-                     <HBox.margin>
-                        <Insets bottom="10.0" left="5.0" right="5.0" top="10.0" />
-                     </HBox.margin>
-                     <children>
-                        <VBox fx:id="test" prefHeight="385.0" prefWidth="385.0" styleClass="card">
-                           <children>
-                              <JFXListView fx:id="myListView" maxHeight="1.7976931348623157E308" minHeight="40.0" minWidth="40.0" prefHeight="360.0" prefWidth="360.0" />
-                           </children>
-                        </VBox>
-                        <JFXButton fx:id="actionButtonSearch" buttonType="RAISED" ripplerFill="#757575" style="-fx-background-color: #00BCD4; -fx-background-radius: 46px; -fx-min-height: 54px; -fx-min-width: 54px;" textOverrun="CLIP" StackPane.alignment="BOTTOM_RIGHT">
-                           <graphic>
-                              <MaterialDesignIconView fill="WHITE" glyphName="MAGNIFY" size="32" />
-                           </graphic>
-                           <StackPane.margin>
-                              <Insets bottom="-30.0" right="70.0" />
-                           </StackPane.margin>
-                        </JFXButton>
-                        <JFXButton fx:id="actionButtonAdd" buttonType="RAISED" ripplerFill="#757575" style="-fx-background-color: #00BCD4; -fx-background-radius: 46px; -fx-min-height: 54px; -fx-min-width: 54px;" textOverrun="CLIP" StackPane.alignment="BOTTOM_RIGHT">
-                           <graphic>
-                              <MaterialDesignIconView fill="WHITE" glyphName="PLUS" size="32" />
-                           </graphic>
-                           <StackPane.margin>
-                              <Insets bottom="-30.0" />
-                           </StackPane.margin>
-                        </JFXButton>
-                     </children>
-                  </StackPane>
-               </children>
-            </HBox>
+            <HBox fx:id="mainHbox" maxHeight="-Infinity" maxWidth="-Infinity" />
          </children>
       </VBox>
    </children>

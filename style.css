@@ -95,6 +95,12 @@
 .button-icon {
     -fx-fill: rgba(0,0,0,.45);
 }
+.floating-action-button {
+    -fx-background-color: #00BCD4;
+    -fx-background-radius: 46px;
+    -fx-min-height: 54px;
+    -fx-min-width: 54px;
+}
 
 .card {
 	-fx-background-color: rgb(255.0, 255.0, 255.0);

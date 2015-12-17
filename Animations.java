@@ -88,10 +88,17 @@ public class Animations {
         return NewCardDestroy;
     }
 
-    public static RotateTransition newSortIconClickedAnimation(Node node) {
+    public static RotateTransition newSortIconClickedAnimation(Node node, boolean up) {
         RotateTransition SortIconClicked = new RotateTransition(Duration.millis(700), node);
         SortIconClicked.setInterpolator(Interpolator.SPLINE(.62, .28, .23, .99));
-        SortIconClicked.setByAngle(180);
+        if (up) {
+            if (node.getRotate() > 90 && node.getRotate() < 270) SortIconClicked.setToAngle(360);
+            else SortIconClicked.setToAngle(0);
+            SortIconClicked.setOnFinished((e)->node.setRotate(0));
+        } else {
+            SortIconClicked.setToAngle(180);
+        }
+        System.out.println(node.getRotate());
         SortIconClicked.setCycleCount(1);
         return SortIconClicked;
     }
