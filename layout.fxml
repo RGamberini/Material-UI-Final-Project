@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.materialdesignicons.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.*?>
+<?import java.lang.*?>
+
+<StackPane fx:id="mainContainer" prefHeight="500.0" prefWidth="816.0" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <children>
+      <JFXTabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="816.0">
+         <tabs>
+            <Tab fx:id="students" text="Students">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+               </content>
+               <graphic>
+                  <MaterialDesignIconView fill="WHITE" glyphName="SCHOOL" size="25.0" />
+               </graphic>
+            </Tab>
+            <Tab fx:id="faculty" text="Faculty">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+               </content>
+               <graphic>
+                  <MaterialDesignIconView fill="WHITE" glyphName="HUMAN_MALE_FEMALE" size="25.0" />
+               </graphic>
+            </Tab>
+            <Tab fx:id="textbooks" text="Textbooks">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+               </content>
+               <graphic>
+                  <MaterialDesignIconView fill="WHITE" glyphName="BOOK_MULTIPLE" size="25.0" />
+               </graphic>
+            </Tab>
+            <Tab fx:id="courses" text="Courses">
+               <content>
+                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+               </content>
+               <graphic>
+                  <MaterialDesignIconView fill="WHITE" glyphName="CHAIR_SCHOOL" size="25.0" />
+               </graphic>
+            </Tab>
+         </tabs>
+      </JFXTabPane>
+   </children>
+</StackPane>

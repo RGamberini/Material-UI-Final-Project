@@ -1,37 +1,27 @@
 package sample;
 
 import com.jfoenix.controls.JFXTextField;
-import com.sun.javafx.collections.MappingChange;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
 import de.jensd.fx.glyphs.materialicons.MaterialIcon;
 import de.jensd.fx.glyphs.materialicons.MaterialIconView;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.ObjectProperty;
-import javafx.beans.property.SimpleObjectProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.geometry.Insets;
-import javafx.scene.Cursor;
-import javafx.scene.control.Label;
-import javafx.scene.control.OverrunStyle;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.Priority;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Created by Nick on 12/9/2015.
  */
 public class Person extends RudeObject {
-    private StringProperty firstName, lastName, phone, homeAddress;
-    private IconCell subLabel;
+    private RudeProperty firstName;
+    private RudeProperty lastName;
+    private RudeProperty phone;
+    private RudeProperty homeAddress;
     private static int c = 0;
 
     public Person() {
@@ -39,20 +29,25 @@ public class Person extends RudeObject {
         //Initialization stuff
         propertyMap = new HashMap<>();
 
-        this.firstName = new SimpleStringProperty();
+        this.firstName = new RudeProperty();
         propertyMap.put("First Name", firstNameProperty());
 
-        this.lastName = new SimpleStringProperty();
+        this.lastName = new RudeProperty();
         propertyMap.put("Last Name", lastNameProperty());
 
-        this.phone = new SimpleStringProperty();
+        this.phone = new RudeProperty();
         propertyMap.put("Phone", phoneProperty());
 
-        this.homeAddress = new SimpleStringProperty();
+        this.homeAddress = new RudeProperty();
         propertyMap.put("Home Address", homeAddressProperty());
 
-        this.subLabelProperty = new SimpleStringProperty();
+        RudeProperty _id = new RudeProperty(Integer.toString(c++));
+        _id.setReadOnly(true);
+        propertyMap.put("ID", _id);
+
+        this.subLabelProperty = new RudeProperty();
         this.profileImage = new SimpleObjectProperty<>();
+        setProfileImage(RandomRudeObjectFactory.randomProfilePicture());
 
         layoutInit();
     }
@@ -68,7 +63,7 @@ public class Person extends RudeObject {
         //End Initialization stuff
     }
 
-    private void layoutInit() {
+    protected void layoutInit() {
         //The down and dirty
         this.mainLabel.textProperty().bind(Bindings.concat(firstNameProperty(), " ", lastNameProperty()));
 
@@ -86,21 +81,7 @@ public class Person extends RudeObject {
         RudeIcon delete = new RudeDeleteIcon(this);
         this.icons.add(delete);
 
-        subLabel = new IconCell();
-        subLabel.setInList(true);
-        RudeIcon subEdit = new RudeEditIcon(subLabel, subLabel.mainLabel) {
-            @Override
-            public void assignText(String text) {
-                propertyMap.get(getSubLabelProperty()).set(text);
-            }
-        };
-        subLabel.icons.add(subEdit);
-        this.getChildren().add(subLabel);
-        subLabel.setMargin(subLabel.mainLabel, new Insets(0, 5, 0, 15));
-
-        this.subLabelPropertyProperty().addListener((o, oldVal, newVal) -> {
-            subLabel.mainLabel.textProperty().bind(this.propertyMap.get(newVal));
-        });
+        super.layoutInit();
     }
     public void initHeader() {
 
@@ -118,6 +99,7 @@ public class Person extends RudeObject {
                 setLastName(text.substring(i + 1));
             }
         });
+        name.mainLabel.setStyle("-fx-font-size: 20px");
 
         headerCell1.mainLabel.textProperty().bind(this.phoneProperty());
         headerCell1.icons.clear();
@@ -143,24 +125,24 @@ public class Person extends RudeObject {
         setFirstName("");
         setLastName("");
         ChangeListener nameListener = new ChangeListener<Boolean>() {
-            @Override
-            public void changed(ObservableValue<? extends Boolean> o, Boolean oldVal, Boolean newVal) {
-                if (newVal) {
-                    nameField.textProperty().unbind();
-                    nameField.textProperty().addListener((_o, _oldVal, _newVal) -> {
-                        int i = _newVal.indexOf(" ");
-                        if (i > -1 && i < _newVal.length() - 1) {
-                            setFirstName(_newVal.substring(0, i).trim());
-                            setLastName(_newVal.substring(i).trim());
-                        } else {
-                            setFirstName(_newVal.trim());
-                            setLastName("");
-                        }
-                    });
-                } else {
-                    nameField.textProperty().bind(Bindings.concat(firstNameProperty(), " ", lastNameProperty()));
+                @Override
+                public void changed(ObservableValue<? extends Boolean> o, Boolean oldVal, Boolean newVal) {
+                    if (newVal) {
+                        nameField.textProperty().unbind();
+                        nameField.textProperty().addListener((_o, _oldVal, _newVal) -> {
+                            int i = _newVal.indexOf(" ");
+                            if (i > -1 && i < _newVal.length() - 1) {
+                                setFirstName(_newVal.substring(0, i).trim());
+                                setLastName(_newVal.substring(i).trim());
+                            } else {
+                                setFirstName(_newVal.trim());
+                                setLastName("");
+                            }
+                        });
+                    } else {
+                        nameField.textProperty().bind(Bindings.concat(firstNameProperty(), " ", lastNameProperty()));
+                    }
                 }
-            }
         };
         nameField.focusedProperty().addListener(nameListener);
 
@@ -172,44 +154,25 @@ public class Person extends RudeObject {
     }
 
     @Override
-    public String getDEFAULT_SORT_PROPERTY() {
+    public String getDEFAULT_MAIN_SORT_PROPERTY() {
         return "Last Name";
     }
 
     @Override
+    public String getDEFAULT_SUB_SORT_PROPERTY() {
+        return "First Name";
+    }
+
+    @Override
     public RudeObject randomInstance() {
-        return RandomPersonFactory.randomPerson();
-    }
-
-    @Override
-    public void handleHoverAction(MouseEvent event) {
-        super.handleHoverAction(event);
-        this.subLabel.handleHoverAction(event);
-    }
-
-    @Override
-    public void handleMouseClick(MouseEvent event) {
-        super.handleMouseClick(event);
-        subLabel.handleMouseClick(event);
-    }
-
-    @Override
-    public void handleMouseEntered(MouseEvent event) {
-        super.handleMouseEntered(event);
-        this.subLabel.handleMouseEntered(event);
-    }
-
-    @Override
-    public void handleMouseExited(MouseEvent event) {
-        super.handleMouseExited(event);
-        this.subLabel.handleMouseExited(event);
+        return RandomRudeObjectFactory.randomPerson();
     }
 
     public String getFirstName() {
         return firstName.get();
     }
 
-    public StringProperty firstNameProperty() {
+    public RudeProperty firstNameProperty() {
         return firstName;
     }
 
@@ -221,7 +184,7 @@ public class Person extends RudeObject {
         return lastName.get();
     }
 
-    public StringProperty lastNameProperty() {
+    public RudeProperty lastNameProperty() {
         return lastName;
     }
 
@@ -233,7 +196,7 @@ public class Person extends RudeObject {
         return phone.get();
     }
 
-    public StringProperty phoneProperty() {
+    public RudeProperty phoneProperty() {
         return phone;
     }
 
@@ -245,7 +208,7 @@ public class Person extends RudeObject {
         return homeAddress.get();
     }
 
-    public StringProperty homeAddressProperty() {
+    public RudeProperty homeAddressProperty() {
         return homeAddress;
     }
 

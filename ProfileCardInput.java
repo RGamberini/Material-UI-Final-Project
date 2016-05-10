@@ -1,22 +1,24 @@
 package sample;
 
-import com.jfoenix.controls.JFXButton;
-import com.jfoenix.controls.JFXTextField;
+import com.jfoenix.controls.*;
 import de.jensd.fx.glyphs.materialicons.MaterialIcon;
 import de.jensd.fx.glyphs.materialicons.MaterialIconView;
-import javafx.beans.binding.Bindings;
 import javafx.beans.property.*;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Paint;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 /**
@@ -24,10 +26,11 @@ import java.util.Map;
  */
 public class ProfileCardInput extends ProfileCard {
     private RudeObject personToBe;
+    private TabPane tabPane;
     public JFXButton submit = new JFXButton(), cancel = new JFXButton();
     public JFXButton[] buttons = {submit, cancel};
 
-    public ProfileCardInput(Class<? extends RudeObject> cls) {
+    public ProfileCardInput(Class<? extends RudeObject> cls, Map<Class<? extends RudeObject>, ArrayList<RudeObject>> fullSet) {
         super();
         try {
             personToBe = cls.newInstance();
@@ -38,7 +41,7 @@ public class ProfileCardInput extends ProfileCard {
         }
 
         profileImage.imageProperty().bind(personToBe.profileImageProperty());
-        personToBe.setProfileImage(RandomPersonFactory.randomProfilePicture());
+        //personToBe.setProfileImage(RandomRudeObjectFactory.randomProfilePicture());
 
         name.getChildren().remove(name.mainLabel);
         name.setStyle("-fx-border-style: hidden hidden hidden hidden;");
@@ -57,18 +60,57 @@ public class ProfileCardInput extends ProfileCard {
         headerCell2.getChildren().add(headerCell2Field);
 
         personToBe.initInputHeader(nameField, headerCell1Field, headerCell2Field);
-        for (Map.Entry<String, StringProperty> entry: personToBe.propertyMap.entrySet()) {
+        if (personToBe.extraLists != null) {
+            this.getChildren().remove(tabPane);
+            this.getChildren().remove(propertyList);
+
+            tabPane = new JFXTabPane();
+            this.getChildren().add(tabPane);
+            Tab newTabe = new Tab();
+            newTabe.setText("Properties");
+            tabPane.getTabs().add(newTabe);
+            newTabe.setContent(propertyList);
+
+            for(Map.Entry<String, ObservableList<RudeObject>> entry: personToBe.extraLists.entrySet()) {
+                Tab newTab = new Tab();
+                tabPane.getTabs().add(newTab);
+                newTab.setText(entry.getKey());
+
+                VBox tempVBox = new VBox();
+
+                JFXComboBox<RudeObject> comboBox = new JFXComboBox<>();
+                comboBox.getItems().addAll(fullSet.get(personToBe.extraListClass));
+                comboBox.setMaxWidth(Double.MAX_VALUE);
+                comboBox.getSelectionModel().selectedItemProperty().addListener((o, oldVal, newVal) -> {
+                    entry.getValue().add(newVal);
+                });
+
+                JFXListView<RudeObject> newListView = new JFXListView();
+                VBox.setVgrow(newListView, Priority.ALWAYS);
+                newListView.setItems(entry.getValue());
+
+                tempVBox.getChildren().addAll(comboBox, newListView);
+                newTab.setContent(tempVBox);
+            }
+        }
+        for (Map.Entry<String, RudeProperty> entry: personToBe.propertyMap.entrySet()) {
             IconCell cell = new IconCell();
             cell.mainLabel.setText(entry.getKey());
             cell.setExempt(true);
             HBox.setMargin(cell.mainLabel, new Insets(0, 0, 0, 16));
 
-            JFXTextField subLabel = new JFXTextField();
-            subLabel.setPromptText(entry.getKey());
-            subLabel.textProperty().bindBidirectional(entry.getValue());
-            cell.getChildren().add(subLabel);
+            if (!entry.getValue().isReadOnly()) {
+                JFXTextField subLabel = new JFXTextField();
+                subLabel.setPromptText(entry.getKey());
+                subLabel.textProperty().bindBidirectional(entry.getValue());
+                cell.getChildren().add(subLabel);
+                cell.setMargin(subLabel, new Insets(0, 5, 0, 5));
+            } else {
+                Label subLabel = new Label(entry.getValue().get());
+                cell.getChildren().add(subLabel);
+                cell.setMargin(subLabel, new Insets(5, 135, 5, 0));
+            }
 
-            cell.setMargin(subLabel, new Insets(0, 5, 0, 5));
             listViewData.add(cell);
         }
         listViewData.sort(new RudeCellComparator("test"));

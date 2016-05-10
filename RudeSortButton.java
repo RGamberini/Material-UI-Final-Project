@@ -20,7 +20,7 @@ public class RudeSortButton extends JFXButton {
     private BooleanProperty active;
     private MaterialDesignIconView sortIcon;
     private RotateTransition rotate;
-    private StringProperty sortProperty;
+    private RudeProperty sortProperty;
 
     public RudeSortButton(boolean active) {
         super();
@@ -41,7 +41,7 @@ public class RudeSortButton extends JFXButton {
 
         sortAscending = new SimpleBooleanProperty(true);
         this.active = new SimpleBooleanProperty(active);
-        sortProperty = new SimpleStringProperty();
+        sortProperty = new RudeProperty();
 
         this.setOnMouseClicked((e) -> {
             if (getActive()) {
@@ -91,7 +91,7 @@ public class RudeSortButton extends JFXButton {
         return sortProperty.get();
     }
 
-    public StringProperty sortPropertyProperty() {
+    public RudeProperty sortPropertyProperty() {
         return sortProperty;
     }
 

@@ -75,7 +75,7 @@
 }
 
 .profile-card-name {
-    -fx-font-size: 20px;
+    /*-fx-font-size: 20px;*/
     -fx-border-style: hidden hidden solid hidden;
     -fx-border-color: rgb(0,0,0,.25);
     /*-fx-text-fill: rgb(100,100,100);*/

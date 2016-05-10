@@ -1,13 +1,19 @@
 package sample;
 
+import com.jfoenix.controls.JFXButton;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXListView;
 import com.jfoenix.controls.JFXTextField;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
@@ -22,11 +28,11 @@ public class SearchCard extends VBox {
     private JFXTextField searchInput;
     private JFXListView searchResultView;
     private ObservableList<RudeObject> searchResultData;
-    private StringProperty searchProperty;
+    private RudeProperty searchProperty;
 
     public SearchCard(ObservableList<RudeObject> fullSetData, Set<String> properties) {
         super();
-        searchProperty = new SimpleStringProperty();
+        searchProperty = new RudeProperty();
 
         HBox.setMargin(this, new Insets(10, 5, 5, 10));
         this.setPrefSize(385, 385);
@@ -69,6 +75,14 @@ public class SearchCard extends VBox {
             }
         });
 
+        JFXButton done = new JFXButton("Done");
+        done.getStyleClass().add("button-cancel");
+        done.setPadding(new Insets(0, 35, 0, 35));
+        VBox.setMargin(done, new Insets(10, 0 ,0 ,0));
+        this.setAlignment(Pos.BOTTOM_RIGHT);
+        this.getChildren().add(done);
+        done.addEventHandler(MouseEvent.MOUSE_CLICKED, (e)->onCardClearProperty.get().handle(new FloatingCardEvent(FloatingCardEvent.CLEAR)));
+
 
         //Setup for the user
         propertyList.getSelectionModel().select(0);
@@ -82,11 +96,21 @@ public class SearchCard extends VBox {
         return searchProperty.get();
     }
 
-    public StringProperty searchPropertyProperty() {
+    public RudeProperty searchPropertyProperty() {
         return searchProperty;
     }
 
     public void setSearchProperty(String searchProperty) {
         this.searchProperty.set(searchProperty);
+    }
+
+    private ObjectProperty<EventHandler<? super FloatingCardEvent>> onCardClearProperty = new SimpleObjectProperty<>((clear)-> {});
+
+    public EventHandler<? super FloatingCardEvent> getOnClear() {
+        return onCardClearProperty.get();
+    }
+
+    public void setOnClear(EventHandler<? super FloatingCardEvent> handler) {
+        this.onCardClearProperty.set(handler);
     }
 }

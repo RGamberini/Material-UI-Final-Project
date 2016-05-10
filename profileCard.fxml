@@ -51,22 +51,43 @@
             <Insets left="-16.0" right="-16.0" />
          </VBox.margin>
       </HBox>
-      <JFXListView fx:id="profileCardList">
-         <VBox.margin>
-            <Insets />
-         </VBox.margin>
-      </JFXListView>
-      <HBox alignment="CENTER_RIGHT" style="-fx-border-style: solid hidden hidden hidden; -fx-border-color: #FF00FF00;">
-         <children>
-            <JFXButton alignment="CENTER_RIGHT" contentDisplay="BOTTOM" text="Submit" />
-            <JFXButton alignment="CENTER_RIGHT" contentDisplay="BOTTOM" text="Submit">
-               <HBox.margin>
-                  <Insets right="16.0" />
-               </HBox.margin></JFXButton>
-         </children>
-         <VBox.margin>
-            <Insets left="-16.0" right="-16.0" top="10.0" />
-         </VBox.margin>
-      </HBox>
+      <JFXTabPane>
+         <tabs>
+            <Tab text="Untitled Tab">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <StackPane prefHeight="160.0">
+                           <children>
+                              <ImageView fx:id="profileImage1" fitHeight="160.0" fitWidth="160.0" pickOnBounds="true" preserveRatio="true">
+                                 <StackPane.margin>
+                                    <Insets />
+                                 </StackPane.margin>
+                                 <image>
+                                    <Image url="@../resources/avatars/Person/user_male_banned_material.png" />
+                                 </image>
+                              </ImageView>
+                              <Circle fill="#1f93ff00" radius="75.0" stroke="#00000082" strokeType="INSIDE" strokeWidth="2.0">
+                                 <effect>
+                                    <DropShadow />
+                                 </effect>
+                              </Circle>
+                           </children>
+                        </StackPane>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="What">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <JFXListView fx:id="profileCardList" layoutY="1.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="168.0" prefWidth="353.0" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+         </tabs>
+      </JFXTabPane>
    </children>
 </VBox>

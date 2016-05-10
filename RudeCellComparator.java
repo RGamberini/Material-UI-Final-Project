@@ -1,6 +1,5 @@
 package sample;
 
-import com.jfoenix.controls.JFXListCell;
 import javafx.scene.Node;
 
 import java.util.Comparator;
@@ -17,11 +16,16 @@ public class RudeCellComparator implements Comparator<Node>{
 
     @Override
     public int compare(Node o1, Node o2) {
-        if(o1 instanceof Person && o2 instanceof Person) {
-            String lastName1 = ((Person) o1).propertyMap.get(sortProperty).get(), lastName2 = ((Person) o2).propertyMap.get(sortProperty).get();
-//            System.out.println(lastName1 + " " + lastName2);
-            int n = String.CASE_INSENSITIVE_ORDER.compare(lastName1, lastName2);
-            return (n != 0) ? n : lastName1.compareTo(lastName2);
+        if(o1 instanceof RudeObject && o2 instanceof RudeObject) {
+            String property1 = ((RudeObject) o1).propertyMap.get(sortProperty).get();
+            String property2 = ((RudeObject) o2).propertyMap.get(sortProperty).get();
+            try {
+                double x1 = Double.parseDouble(property1);
+                double x2 = Double.parseDouble(property2);
+                return (int) (x1 - x2);
+            } catch (NumberFormatException e) {}
+            int n = String.CASE_INSENSITIVE_ORDER.compare(property1, property2);
+            return (n != 0) ? n : property1.compareTo(property2);
         } else if(o1 instanceof IconCell && o2 instanceof IconCell) {
             String mainLabel1 = ((IconCell) o1).mainLabel.getText(), mainLabel2 = ((IconCell) o2).mainLabel.getText();
             int n = String.CASE_INSENSITIVE_ORDER.compare(mainLabel1, mainLabel2);

@@ -1,7 +1,6 @@
 package sample;
 
 import com.jfoenix.controls.JFXTextField;
-import javafx.beans.property.StringProperty;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.scene.Node;
@@ -19,7 +18,7 @@ import javax.swing.*;
  */
 public class RudeEditIcon  extends RudeIcon{
     private Label toEdit;
-    private StringProperty toEditProperty = null;
+    private RudeProperty toEditProperty = null;
     private JFXTextField newField = null;
     private int index = -1;
     private EventHandler<MouseEvent> handler;
@@ -43,7 +42,7 @@ public class RudeEditIcon  extends RudeIcon{
         };
     }
 
-    public RudeEditIcon(IconCell iconCell, Label toEdit, StringProperty toEditProperty) {
+    public RudeEditIcon(IconCell iconCell, Label toEdit, RudeProperty toEditProperty) {
         this(iconCell, toEdit);
         this.toEditProperty = toEditProperty;
     }

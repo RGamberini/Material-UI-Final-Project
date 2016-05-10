@@ -2,24 +2,16 @@ package sample;
 
 import com.jfoenix.controls.JFXListCell;
 import com.jfoenix.controls.JFXListView;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
-import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView;
-import de.jensd.fx.glyphs.materialicons.MaterialIcon;
-import de.jensd.fx.glyphs.materialicons.MaterialIconView;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
 import javafx.scene.control.OverrunStyle;
-import javafx.scene.effect.DropShadow;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.StrokeType;
 
 /**
  * Created by Nick on 12/14/2015.
@@ -29,6 +21,7 @@ public class ProfileCard extends VBox{
     protected VBox headerVbox;
     protected ImageView profileImage;
     protected IconCell name, headerCell1, headerCell2;
+    protected StackPane avatarStackPane;
 
     protected ObservableList<Node> listViewData = FXCollections.observableArrayList();
     protected IconCell[] cells;
@@ -37,6 +30,7 @@ public class ProfileCard extends VBox{
         super();
         HBox.setMargin(this, new Insets(10, 5, 5, 10));
         this.setPrefSize(385, 385);
+        this.setMaxSize(385, 385);
         this.getStyleClass().add("card");
         this.getStyleClass().add("profile-card");
 
@@ -51,28 +45,20 @@ public class ProfileCard extends VBox{
         HBox.setMargin(headerVbox, new Insets(0, 0, 0, 16));
         tempHBox.getChildren().add(headerVbox);
 
-        StackPane tempStackPane = new StackPane();
-        //tempStackPane.setPrefHeight(75);
-        HBox.setMargin(tempStackPane, new Insets(-16, 0, 0, 0));
-        tempHBox.getChildren().add(tempStackPane);
+        avatarStackPane = new StackPane();
+        //avatarStackPane.setPrefHeight(75);
+        HBox.setMargin(avatarStackPane, new Insets(-16, 0, 0, 0));
+        tempHBox.getChildren().add(avatarStackPane);
 
         profileImage = new ImageView();
         profileImage.setFitHeight(160);
         profileImage.setFitWidth(160);
         profileImage.setPreserveRatio(true);
-        tempStackPane.getChildren().add(profileImage);
-
-        Circle tempCircle = new Circle();
-        tempCircle.setFill(Paint.valueOf("#1f93ff00"));
-        tempCircle.setRadius(75.0);
-        tempCircle.setStroke(Paint.valueOf("#00000082"));
-        tempCircle.setStrokeWidth(2.0);
-        tempCircle.setStrokeType(StrokeType.INSIDE);
-        tempCircle.setEffect(new DropShadow());
-        tempStackPane.getChildren().add(tempCircle);
+        avatarStackPane.getChildren().add(profileImage);
 
         propertyList = new JFXListView<>();
         VBox.setVgrow(propertyList, Priority.ALWAYS);
+        propertyList.setMaxHeight(209);
         this.getChildren().add(propertyList);
 
         initialize();

@@ -7,7 +7,6 @@ import de.jensd.fx.glyphs.materialdesignicons.MaterialDesignIconView;
 import javafx.animation.ParallelTransition;
 import javafx.animation.PauseTransition;
 import javafx.animation.TranslateTransition;
-import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -23,9 +22,7 @@ import javafx.util.Duration;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Map;
-import java.util.Set;
 
 /**
  * Created by Nick on 12/16/2015.
@@ -39,9 +36,10 @@ public class MainListCard extends StackPane {
     public ObservableList<RudeObject> listViewData = FXCollections.observableArrayList();
     public TitleCell titleCell;
     public Class<? extends RudeObject> currentClass;
+    Map<Class<? extends RudeObject>, ArrayList<RudeObject>> fullSet;
     private RudeObject blank;
 
-    public MainListCard(JFXDialog dialog, Class<? extends RudeObject> currentClass) throws IOException {
+    public MainListCard(JFXDialog dialog, Class<? extends RudeObject> currentClass,  Map<Class<? extends RudeObject>, ArrayList<RudeObject>> fullSet) throws IOException {
         super();
         this.setAlignment(Pos.BOTTOM_RIGHT);
         this.currentClass = currentClass;
@@ -53,7 +51,7 @@ public class MainListCard extends StackPane {
             e.printStackTrace();
         }
 
-        HBox.setMargin(this, new Insets(10, 5, 10, 16));
+        VBox.setMargin(this, new Insets(10, 5, 10, 16));
 
         mainVbox.setPrefSize(385, 385);
         mainVbox.getStyleClass().add("card");
@@ -82,6 +80,8 @@ public class MainListCard extends StackPane {
         search.setFill(Paint.valueOf("WHITE"));
         actionButtonSearch.setGraphic(search);
         this.getChildren().add(actionButtonSearch);
+
+        this.fullSet = fullSet;
         initialize(dialog);
     }
 
@@ -140,7 +140,7 @@ public class MainListCard extends StackPane {
         });
         myListView.getStyleClass().add("mylistview");
 
-        titleCell = new TitleCell("Name", blank.getDEFAULT_SORT_PROPERTY(), blank.propertyMap.keySet());
+        titleCell = new TitleCell("Name", blank.getDEFAULT_MAIN_SORT_PROPERTY(), blank.propertyMap.keySet());
         titleCell.activeButtonProperty().addListener((o, oldVal, newVal) -> {
             sort(newVal, newVal.getSortAscending());
             newVal.sortAscendingProperty().addListener((_o, _oldVal, _newVal) -> {
@@ -162,10 +162,7 @@ public class MainListCard extends StackPane {
             }
         });
 
-        for (int i = 0; i < 16; i++) {
-            listViewData.add(blank.randomInstance());
-        }
-
+        listViewData.addAll(fullSet.get(currentClass));
         myListView.setItems(listViewData);
         listViewData.sort(new RudeCellComparator(titleCell.mainText.getSortProperty()));
         //The overview card is setup now to setup the Profile Card
@@ -185,7 +182,7 @@ public class MainListCard extends StackPane {
         }
 
         actionButtonAdd.setOnMouseClicked((e) -> {
-            ProfileCardInput profileCardInput = new ProfileCardInput(currentClass);
+            ProfileCardInput profileCardInput = new ProfileCardInput(currentClass, fullSet);
 
             profileCardInput.setScaleX(0);
             profileCardInput.setScaleY(0);
@@ -246,7 +243,19 @@ public class MainListCard extends StackPane {
             int index = this.getChildren().indexOf(myListView.getParent());
             JFXDepthManager.setDepth(searchCard, 4);
             this.getChildren().add(index + 1, searchCard);
+
+            searchCard.setOnClear((clear) -> {
+                ParallelTransition buttonRestore = new ParallelTransition();
+                for (JFXButton _button : floatingActionButtons) {
+                    buttonRestore.getChildren().add(Animations.newFloatingActionButtonRestoredAnimation(_button));
+                }
+                ParallelTransition cardDestroy = Animations.newCardDestroyAnimation(searchCard);
+                //cardDestroy.setOnFinished((_e) -> buttonRestore.play());
+                cardDestroy.play();
+                buttonRestore.play();
+            });
         });
+        this.titleCell.subMenu.getSelectionModel().select(this.titleCell.subMenu.getItems().indexOf(blank.getDEFAULT_SUB_SORT_PROPERTY()));
     }
     private void sort(RudeSortButton rudeSortButton, boolean forwards) {
         if (forwards) {

@@ -33,7 +33,7 @@ public class TitleCell extends RudeCell{
     public TitleCell(String mainText, String mainSortProperty, Set<String> properties) {
         super();
         //this.setExempt(true);
-        this.setMinHeight(25);
+        this.setMinHeight(14);
 
         this.mainText = new RudeSortButton(true);
         this.mainText.setText(mainText);

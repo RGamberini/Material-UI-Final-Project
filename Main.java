@@ -17,7 +17,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("sample.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("layout.fxml"));
         Parent root = (Parent) loader.load();
 
         Scene scene = new Scene(root, 816, 500);
@@ -25,7 +25,7 @@ public class Main extends Application {
         scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         //scene.addEventFilter(MouseEvent.MOUSE_CLICKED, (e) -> System.out.println("meme1"));
 
-        primaryStage.setTitle("Educational Manager V.2");
+        primaryStage.setTitle("Scholastic Personnel Manager");
         primaryStage.setScene(scene);
         //primaryStage.setResizable(false);
 
